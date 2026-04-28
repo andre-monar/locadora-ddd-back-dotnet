@@ -42,8 +42,5 @@ namespace Entities.Entities
 
         [NotMapped]
         public IFormFile Imagem { get; set; }
-
-        [Column("CAR_URL")]
-        public string Url { get; set; }
     }
 }

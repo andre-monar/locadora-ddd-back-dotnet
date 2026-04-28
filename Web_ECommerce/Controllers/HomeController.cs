@@ -1,37 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Web_ECommerce.Models;
 
-namespace Web_ECommerce.Controllers
+namespace Web_Locadora.Controllers
 {
-    public class HomeController : Controller
+    // ─────────────────────────────────────────────────────────────
+    //  HomeController
+    //  Responsável apenas por servir a tela inicial (React SPA).
+    //  Toda a navegação entre Cliente / Veículo / Alocação é feita
+    //  pelo React no front — o MVC não precisa de rotas adicionais
+    //  para essas seções enquanto usarmos a abordagem de SPA.
+    //
+    //  Se quiser SSR tradicional depois, basta criar Views para cada
+    //  action e mover a lógica de dados para cá, chamando ApiGetList
+    //  via BaseController.
+    // ─────────────────────────────────────────────────────────────
+    public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
+        public HomeController(IHttpClientFactory httpClientFactory)
+            : base(httpClientFactory) { }
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
+        // GET /
+        // GET /Home/Index
+        // Retorna a View que hospeda o bundle React (wwwroot/index.html
+        // ou a View Razor que carrega o script).
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        // Ponto de verificação simples — útil durante o desenvolvimento
+        // para confirmar que a API está respondendo.
+        // GET /Home/ApiStatus
+        public async Task<IActionResult> ApiStatus()
         {
+            try
+            {
+                var client = CreateClient();
+                var response = await client.GetAsync("/swagger/v1/swagger.json");
+                ViewBag.ApiOk = response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                ViewBag.ApiOk = false;
+            }
             return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
