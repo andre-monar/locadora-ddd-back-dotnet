@@ -17,11 +17,5 @@ namespace Domain.Services
             _ICompraUsuario = ICompraUsuario;
         }
 
-        public Task<Alocacao> AtualizarStatus(int alocacaoId, AlocacaoStatusEnum status)
-        {
-            // pra atualizarmos o status basta fazer o codigo: 
-            // e ai atualizar o status e depois chamar o método de update do repositório
-            // assim: 
-        }
     }
 }

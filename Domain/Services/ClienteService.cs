@@ -23,7 +23,7 @@ namespace Domain.Services
             // Validações de campo
             var validaCPF = cliente.ValidarCPF(cliente.CPF, "CPF");
             var validaCNH = cliente.ValidarCNH(cliente.CNH, "CNH");
-            var validaNome = cliente.ValidarNome(cliente.Nome, "Nome");
+            var validaNome = cliente.ValidarPropriedadeString(cliente.Nome, "Nome");
             var validaEmail = cliente.ValidarEmail(cliente.Email, "Email");
             var validaCelular = cliente.ValidarCelular(cliente.Celular, "Celular");
             var validaCEP = cliente.ValidarCEP(cliente.CEP, "CEP");

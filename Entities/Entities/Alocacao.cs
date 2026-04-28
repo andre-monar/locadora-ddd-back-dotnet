@@ -20,35 +20,46 @@ namespace Entities.Entities
         [Display(Name = "Carro")]
         [ForeignKey("TB_CARRO")]
         [Column(Order = 1)]
+        [Required]
         public int IdCarro { get; set; }
         public virtual Carro Carro { get; set; }
 
         [Display(Name = "Cliente")]
         [ForeignKey("TB_CLIENTE")]
         [Column(Order = 1)]
+        [Required]
         public int IdCliente { get; set; }
         public virtual Cliente Cliente { get; set; }
 
         [Column("ALO_STATUS")]
         [Display(Name = "Status")]
+        [Required]
         public AlocacaoStatusEnum Status { get; set; }
 
-        [Column("ALO_DATA_INICIO")]
-        [Display(Name = "Data de Início")]
-        public DateTime DataInicio { get; set; }
+        [Column("ALO_DATA_RETIRADA")]
+        [Display(Name = "Data de Retirada")]
+        [Required]
+        public DateTime DataRetirada { get; set; }
 
         [Column("ALO_DATA_DEVOLUCAO")]
         [Display(Name = "Data de Devolução")]
         public DateTime DataDevolucao { get; set; }
 
-        [Column("ALO_DATA_FIM")]
-        [Display(Name = "Data de Fim")]
-        public DateTime DataFim { get; set; }
+        [Column("ALO_DATA_PREVISTA_DEVOLUCAO")]
+        [Display(Name = "Data Prevista de Devolução")]
+        [Required]
+        public DateTime DataPrevistaDevolucao { get; set; }
+
+        [Column("ALO_VALOR_TOTAL")]
+        [Display(Name = "Valor Total")]
+        public decimal ValorTotal { get; set; }
 
         [Column("ALO_DATA_ALTERACAO")]
         [Display(Name = "Data de Alteração")]
         public DateTime DataAlteracao { get; set; }
 
-
+        [Column("CAR_DATA_CRIACAO")]
+        [Display(Name = "Data de Criação")]
+        public DateTime DataCriacao { get; set; }
     }
 }

@@ -10,10 +10,5 @@ namespace Domain.Interfaces.InterfaceCompraUsuario
 {
     public interface IAlocacao : IGeneric<Alocacao>
     {
-        public Task<Alocacao> ObterAlocacoesPorCliente(int clienteId);
-
-        public Task<Alocacao> ObterAlocacoesPorStatus(int clienteId, AlocacaoStatusEnum status);
-
-        public Task<bool> ObterDisponibilidadePorCarro(int carroId);
     }
 }

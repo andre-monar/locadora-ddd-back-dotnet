@@ -11,8 +11,7 @@ namespace Domain.Interfaces.InterfaceServices
     {
         // aqui ficam os métodos específicos de Alocacao, ex: ObterAlocacoesPorCliente, ObterAlocacoesPorStatus, ObterDisponibilidadePorCarro, etc
         // nao sabemos ainda quais métodos serão necessários
-        // exceto atualizar status
-        public Task<Alocacao> AtualizarStatus(int alocacaoId, AlocacaoStatusEnum status);
+        
 
     }
 }

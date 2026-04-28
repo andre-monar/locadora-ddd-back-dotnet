@@ -1,12 +1,8 @@
-﻿using Entities.Entities.Enums;
-using Entities.Notifications;
-using Microsoft.AspNetCore.Identity;
+﻿using Entities.Notifications;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-
 namespace Entities.Entities
 {
     public class Cliente : Notifies
@@ -16,23 +12,37 @@ namespace Entities.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Column("CLI_CPF")]
-        [MaxLength(50)]
-        [Display(Name = "CPF")]
-        public string CPF { get; set; }
-
-        [Column("CLI_CNH")]
-        [MaxLength(50)]
-        [Display(Name = "CNH")]
-        public string CNH { get; set; }
-
         [Column("CLI_NOME")]
-        [MaxLength(255)]
+        [MaxLength(150)]
         [Display(Name = "Nome")]
+        [Required]
         public string Nome { get; set; }
 
+        [Column("CLI_CPF")]
+        [StringLength(11, MinimumLength = 11, ErrorMessage = "O CPF deve conter exatamente 11 caracteres.")]
+        [Display(Name = "CPF")]
+        [Required]
+        public string CPF { get; set; }
+
+        [Column("CLI_DATA_NASCIMENTO")]
+        [Display(Name = "Data de Nascimento")]
+        [Required]
+        public DateTime DataNascimento { get; set; }
+
+        [Column("CLI_CELULAR")]
+        [StringLength(11, MinimumLength = 10, ErrorMessage = "Celular deve ter entre 10 e 11 dígitos")]
+        [Display(Name = "Celular")]
+        [Required]
+        public string Celular { get; set; }
+
+        [Column("CLI_EMAIL")]
+        [MaxLength(255)]
+        [Display(Name = "E-mail")]
+        [Required]
+        public string Email { get; set; }
+
         [Column("CLI_CEP")]
-        [MaxLength(15)]
+        [StringLength(8, MinimumLength = 8, ErrorMessage = "O CEP deve conter exatamente 8 caracteres.")]
         [Display(Name = "CEP")]
         public string CEP { get; set; }
 
@@ -46,17 +56,20 @@ namespace Entities.Entities
         [Display(Name = "Complemento de Endereço")]
         public string ComplementoEndereco { get; set; }
 
-        [Column("CLI_CELULAR")]
-        [MaxLength(20)]
-        [Display(Name = "Celular")]
-        public string Celular { get; set; }
+        [Column("CLI_ATIVO")]
+        [Display(Name = "Ativo")]
+        [Required]
+        public bool Ativo { get; set; } = true;
 
-        [Column("CLI_ESTADO")]
-        [Display(Name = "Estado")]
-        public bool Estado { get; set; }
+        [Column("CLI_DATA_CRIACAO")]
+        [Display(Name = "Data de Criação")]
+        public DateTime DataCriacao { get; set; }
 
         [Column("CLI_DATA_ALTERACAO")]
         [Display(Name = "Data de Alteração")]
         public DateTime DataAlteracao { get; set; }
+
+        // Relacionamento 1:N com Alocacao
+        public virtual ICollection<Alocacao> Alocacoes { get; set; }    
     }
 }
