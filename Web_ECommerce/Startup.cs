@@ -35,32 +35,6 @@ namespace Web_ECommerce
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddDbContext<ContextBase>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<Cliente>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ContextBase>();
-            services.AddControllersWithViews();
-            services.AddRazorPages();
-
-            // INTERFACE E REPOSITORIO
-            services.AddSingleton(typeof(IGeneric<>), typeof(RepositoryGenerics<>));
-            services.AddSingleton<ICarro, RepositoryCarro>();
-            services.AddSingleton<IAlocacao, RepositoryAlocacao>();
-
-            // INTERFACE APLICAÇÃO
-            services.AddSingleton<InterfaceProductApp, CarroApp>();
-            services.AddSingleton<InterfaceCompraUsuarioApp, AppCompraUsuario>();
-
-            // SERVIÇO DOMINIO
-            services.AddSingleton<IServiceCarro, CarroService>();
-            services.AddSingleton<IServiceAlocacao, AlocacaoService>();
-
-        }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

@@ -1,80 +1,32 @@
 ﻿using ApplicationApp.Interfaces;
+using Domain.Interfaces.InterfaceCarro;
 using Domain.Interfaces.InterfaceProduct;
 using Domain.Interfaces.InterfaceServices;
 using Entities.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ApplicationApp.OpenApp
 {
-    public class CarroApp : InterfaceProductApp
+    public class CarroApp : IGenericApp<Carro>, ICarroApp
     {
-        ICarro _IProduct;
-        IServiceCarro _IServiceProduct;
-        public CarroApp(ICarro IProduct, IServiceCarro IServiceProduct)
+        private readonly IServiceCarro _service;
+
+        public CarroApp(ICarro repo, IServiceCarro service)
+            : base(repo) // passa o repo pro AppGenerica
         {
-            _IProduct = IProduct;
-            _IServiceProduct = IServiceProduct;
+            _service = service;
         }
 
+        public async Task Adicionar(Carro carro) =>
+            await _service.AddCarro(carro); // usa o service (tem validação)
 
-        public async Task<List<Carro>> ListarProdutosCarrinhoUsuario(string userId)
-        {
-            return await _IProduct.ListarProdutosCarrinhoUsuario(userId);
-        }
+        public async Task Atualizar(Carro carro) =>
+            await _service.UpdateCarro(carro); // usa o service (tem validação)
 
-        public async Task<Carro> ObterProdutoCarrinho(int idProdutoCarrinho)
-        {
-            return await _IProduct.ObterProdutoCarrinho(idProdutoCarrinho);
-        }
-
-
-
-        public async Task AddProduct(Carro produto)
-        {
-            await _IServiceProduct.AddProduct(produto);
-        }
-        public async Task UpdateProduct(Carro produto)
-        {
-            await _IServiceProduct.UpdateProduct(produto);
-        }
-
-        public async Task<List<Carro>> ListarProdutosUsuario(string userId)
-        {
-            return await _IProduct.ListarProdutosUsuario(userId);
-        }
-
-
-        public async Task Add(Carro Objeto)
-        {
-            await _IProduct.Add(Objeto);
-        }
-        public async Task Delete(Carro Objeto)
-        {
-            await _IProduct.Delete(Objeto);
-        }
-        public async Task<Carro> GetEntityById(int Id)
-        {
-            return await _IProduct.GetEntityById(Id);
-        }
-
-        public async Task<List<Carro>> List()
-        {
-            return await _IProduct.List();
-        }
-
-        public async Task Update(Carro Objeto)
-        {
-            await _IProduct.Update(Objeto);
-        }
-
-        public async Task<List<Carro>> ListarProdutosComEstoque(string descricao)
-        {
-            return await _IServiceProduct.ListarProdutosComEstoque(descricao);
-        }
-
-
+        // ListarDisponiveis: método exclusivo do Carro
+        // implementação vai no RepositoryCarro depois
+        public async Task<List<Carro>> ListarDisponiveis() =>
+            await _service.ListarDisponiveis();
     }
 }
