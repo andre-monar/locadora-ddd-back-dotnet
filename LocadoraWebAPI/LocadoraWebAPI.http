@@ -1,0 +1,6 @@
+@LocadoraWebAPI_HostAddress = http://localhost:5153
+
+GET {{LocadoraWebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
