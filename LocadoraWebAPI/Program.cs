@@ -21,8 +21,8 @@ builder.Services.AddSwaggerGen();
 
 // DI
 builder.Services.AddScoped<ICarroApp, CarroApp>();
-builder.Services.AddScoped<IClienteApp, AppGenerica<Cliente>>();
-builder.Services.AddScoped<IAlocacaoApp, AppGenerica<Alocacao>>();
+builder.Services.AddScoped<IClienteApp, GenericApp<Cliente>>();
+builder.Services.AddScoped<IAlocacaoApp, GenericApp<Alocacao>>();
 
 // repositórios também precisam ser registrados
 builder.Services.AddScoped<ICarro, RepositoryCarro>();
