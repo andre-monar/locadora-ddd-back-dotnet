@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Entities.Entities
 {
@@ -48,7 +49,7 @@ namespace Entities.Entities
         [Column("CAR_IMAGEM_URL")]
         [Display(Name = "URL da Imagem")]
         [MaxLength(500)]
-        public string ImagemUrl { get; set; }
+        public string? ImagemUrl { get; set; }
 
         [Display(Name = "CAR_CATEGORIA")]
         [ForeignKey("TB_CATEGORIA_CARRO")]
@@ -70,7 +71,7 @@ namespace Entities.Entities
         public DateTime DataAlteracao { get; set; }
 
         // relacionamento com Alocacao para verificar disponibilidade
-        [NotMapped]
+        [JsonIgnore]
         public virtual ICollection<Alocacao> Alocacoes { get; set; }
     }
 }

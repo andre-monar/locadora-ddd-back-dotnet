@@ -1,6 +1,8 @@
 ﻿using ApplicationApp.Interfaces;
 using Entities.Entities;
+using LocadoraWebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -42,25 +44,49 @@ namespace WebAPI.Controllers
 
         /// <summary>Cadastra um novo veículo.</summary>
         [HttpPost]
-        public async Task<IActionResult> Criar([FromBody] Carro carro)
+        public async Task<IActionResult> Criar([FromBody] CriarCarroDto dto)
         {
+            var carro = new Carro
+            {
+                Modelo = dto.Modelo,
+                Marca = dto.Marca,
+                Placa = dto.Placa,
+                Ano = dto.Ano,
+                Cor = dto.Cor,
+                ImagemUrl = dto.ImagemUrl,
+                IdCategoria = dto.IdCategoria,
+                Ativo = dto.Ativo
+            };
+
             await _carroApp.Adicionar(carro);
 
             if (carro.Notificacoes.Any())
-                return ErroBusiness(string.Join(", ", carro.Notificacoes.Select(n => n.Mensagem)));
+                return ErroValidacao(carro.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
 
             return Criado(carro);
         }
 
         /// <summary>Atualiza um veículo existente.</summary>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Atualizar(int id, [FromBody] Carro carro)
+        public async Task<IActionResult> Atualizar(int id, [FromBody] CriarCarroDto dto)
         {
-            carro.Id = id;
+            var carro = new Carro
+            {
+                Id = id,
+                Modelo = dto.Modelo,
+                Marca = dto.Marca,
+                Placa = dto.Placa,
+                Ano = dto.Ano,
+                Cor = dto.Cor,
+                ImagemUrl = dto.ImagemUrl,
+                IdCategoria = dto.IdCategoria,
+                Ativo = dto.Ativo
+            };
+
             await _carroApp.Atualizar(carro);
 
             if (carro.Notificacoes.Any())
-                return ErroBusiness(string.Join(", ", carro.Notificacoes.Select(n => n.Mensagem)));
+                return ErroValidacao(carro.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
 
             return Sucesso(carro);
         }

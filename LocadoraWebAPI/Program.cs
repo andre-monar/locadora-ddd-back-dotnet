@@ -45,6 +45,10 @@ builder.Services.AddScoped<IClienteApp, ClienteApp>();
 builder.Services.AddScoped<IAlocacaoApp, AlocacaoApp>();
 builder.Services.AddScoped<ICategoriaCarroApp, CategoriaCarroApp>();
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
+    );
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

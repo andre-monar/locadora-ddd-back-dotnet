@@ -51,12 +51,12 @@ namespace Entities.Entities
         [Column("CLI_ENDERECO")]
         [MaxLength(255)]
         [Display(Name = "Endereço")]
-        public string Endereco { get; set; }
+        public string? Endereco { get; set; }
 
         [Column("CLI_COMPLEMENTO_ENDERECO")]
         [MaxLength(450)]
         [Display(Name = "Complemento de Endereço")]
-        public string ComplementoEndereco { get; set; }
+        public string? ComplementoEndereco { get; set; }
 
         [Column("CLI_ATIVO")]
         [Display(Name = "Ativo")]
@@ -72,7 +72,6 @@ namespace Entities.Entities
         public DateTime DataAlteracao { get; set; }
 
         // Relacionamento 1:N com Alocacao
-        [NotMapped]
         [JsonIgnore]
         public virtual ICollection<Alocacao> Alocacoes { get; set; }    
     }

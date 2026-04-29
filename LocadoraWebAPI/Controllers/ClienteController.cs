@@ -1,5 +1,7 @@
 ﻿using ApplicationApp.Interfaces;
+using Domain.Interfaces.InterfaceAlocacao;
 using Entities.Entities;
+using LocadoraWebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -34,25 +36,51 @@ namespace WebAPI.Controllers
 
         /// <summary>Cria um novo cliente.</summary>
         [HttpPost]
-        public async Task<IActionResult> Criar([FromBody] Cliente cliente)
+        public async Task<IActionResult> Criar([FromBody] CriarClienteDto dto)
         {
+            var cliente = new Cliente
+            {
+                Nome = dto.Nome,
+                CPF = dto.CPF,
+                DataNascimento = dto.DataNascimento,
+                Celular = dto.Celular,
+                Email = dto.Email,
+                CEP = dto.CEP,
+                Endereco = dto.Endereco,
+                ComplementoEndereco = dto.ComplementoEndereco,
+                Ativo = dto.Ativo
+            };
+
             await _clienteApp.Adicionar(cliente);
 
             if (cliente.Notificacoes.Any())
-                return ErroBusiness(string.Join(", ", cliente.Notificacoes.Select(n => n.Mensagem)));
+                return ErroValidacao(cliente.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
 
             return Criado(cliente);
         }
 
         /// <summary>Atualiza um cliente existente.</summary>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Atualizar(int id, [FromBody] Cliente cliente)
+        public async Task<IActionResult> Atualizar(int id, [FromBody] CriarClienteDto dto)
         {
-            cliente.Id = id;
+            var cliente = new Cliente
+            {
+                Id = id,
+                Nome = dto.Nome,
+                CPF = dto.CPF,
+                DataNascimento = dto.DataNascimento,
+                Celular = dto.Celular,
+                Email = dto.Email,
+                CEP = dto.CEP,
+                Endereco = dto.Endereco,
+                ComplementoEndereco = dto.ComplementoEndereco,
+                Ativo = dto.Ativo
+            };
+
             await _clienteApp.Atualizar(cliente);
 
             if (cliente.Notificacoes.Any())
-                return ErroBusiness(string.Join(", ", cliente.Notificacoes.Select(n => n.Mensagem)));
+                return ErroValidacao(cliente.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
 
             return Sucesso(cliente);
         }

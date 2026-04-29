@@ -1,6 +1,8 @@
 ﻿using ApplicationApp.Interfaces;
 using Entities.Entities;
+using LocadoraWebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -34,25 +36,45 @@ namespace WebAPI.Controllers
 
         /// <summary>Cria uma nova alocação. Valida disponibilidade do veículo.</summary>
         [HttpPost]
-        public async Task<IActionResult> Criar([FromBody] Alocacao alocacao)
+        public async Task<IActionResult> Criar([FromBody] CriarAlocacaoDto dto)
         {
+            var alocacao = new Alocacao
+            {
+                IdCarro = dto.IdCarro,
+                IdCliente = dto.IdCliente,
+                Status = dto.Status,
+                DataRetirada = dto.DataRetirada,
+                DataDevolucao = dto.DataDevolucao ?? DateTime.MinValue,
+                DataPrevistaDevolucao = dto.DataPrevistaDevolucao
+            };
+
             await _alocacaoApp.Adicionar(alocacao);
 
             if (alocacao.Notificacoes.Any())
-                return ErroBusiness(string.Join(", ", alocacao.Notificacoes.Select(n => n.Mensagem)));
+                return ErroValidacao(alocacao.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
 
             return Criado(alocacao);
         }
 
         /// <summary>Atualiza uma alocação existente (ex: registrar devolução).</summary>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Atualizar(int id, [FromBody] Alocacao alocacao)
+        public async Task<IActionResult> Atualizar(int id, [FromBody] CriarAlocacaoDto dto)
         {
-            alocacao.Id = id;
+            var alocacao = new Alocacao
+            {
+                Id = id,
+                IdCarro = dto.IdCarro,
+                IdCliente = dto.IdCliente,
+                Status = dto.Status,
+                DataRetirada = dto.DataRetirada,
+                DataDevolucao = dto.DataDevolucao ?? DateTime.MinValue,
+                DataPrevistaDevolucao = dto.DataPrevistaDevolucao
+            };
+
             await _alocacaoApp.Atualizar(alocacao);
 
             if (alocacao.Notificacoes.Any())
-                return ErroBusiness(string.Join(", ", alocacao.Notificacoes.Select(n => n.Mensagem)));
+                return ErroValidacao(alocacao.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
 
             return Sucesso(alocacao);
         }

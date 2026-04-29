@@ -17,7 +17,7 @@ namespace WebAPI.Controllers
             NotFound(new { mensagem = $"{entidade} não encontrado(a)." });
 
         // Padroniza retorno de erro de validação/negócio
-        protected IActionResult ErroBusiness(string mensagem) =>
-            BadRequest(new { mensagem });
+        protected IActionResult ErroValidacao(IEnumerable<object> erros) =>
+           BadRequest(new { erros });
     }
 }

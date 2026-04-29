@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Entities.Entities
 {
@@ -22,7 +23,7 @@ namespace Entities.Entities
         [Column("CAT_DESCRICAO")]
         [Display(Name = "Descrição")]
         [MaxLength(500)]
-        public string Descricao { get; set; }
+        public string? Descricao { get; set; }
 
         [Column("CAT_VALOR_DIARIA")]
         [Display(Name = "Valor da Diária")]
@@ -34,7 +35,7 @@ namespace Entities.Entities
         [Required]
         public bool Ativo { get; set; } = true;
 
-        [NotMapped]
+        [JsonIgnore]
         public virtual ICollection<Carro> Carros { get; set; }
     }
 }

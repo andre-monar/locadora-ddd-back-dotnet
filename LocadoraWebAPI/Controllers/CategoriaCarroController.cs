@@ -1,5 +1,7 @@
 ﻿using ApplicationApp.Interfaces;
+using Domain.Interfaces.InterfaceAlocacao;
 using Entities.Entities;
+using LocadoraWebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -15,6 +17,7 @@ namespace WebAPI.Controllers
             _app = app;
         }
 
+        ///<summary>Lista todas as categorias de carro.</summary>
         [HttpGet]
         public async Task<IActionResult> Listar()
         {
@@ -22,6 +25,7 @@ namespace WebAPI.Controllers
             return Sucesso(lista);
         }
 
+        ///<summary>Busca uma categoria pelo ID.</summary>
         [HttpGet("{id}")]
         public async Task<IActionResult> BuscarPorId(int id)
         {
@@ -30,27 +34,46 @@ namespace WebAPI.Controllers
             return Sucesso(obj);
         }
 
+        ///<summary>Cria uma nova categoria de carro.</summary>
         [HttpPost]
-        public async Task<IActionResult> Criar([FromBody] CategoriaCarro categoria)
+        public async Task<IActionResult> Criar([FromBody] CriarCategoriaCarroDto dto)
         {
+            var categoria = new CategoriaCarro
+            {
+                Nome = dto.Nome,
+                Descricao = dto.Descricao,
+                ValorDiaria = dto.ValorDiaria,
+                Ativo = dto.Ativo
+            };
+
             await _app.Adicionar(categoria);
             if (categoria.Notificacoes.Any())
-                return ErroBusiness(string.Join(", ", categoria.Notificacoes.Select(n => n.Mensagem)));
+                return ErroValidacao(categoria.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
 
             return Criado(categoria);
         }
 
+        ///<summary>Atualiza uma categoria existente pelo ID.</summary>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Atualizar(int id, [FromBody] CategoriaCarro categoria)
+        public async Task<IActionResult> Atualizar(int id, [FromBody] CriarCategoriaCarroDto dto)
         {
-            categoria.Id = id;
+            var categoria = new CategoriaCarro
+            {
+                Id = id,
+                Nome = dto.Nome,
+                Descricao = dto.Descricao,
+                ValorDiaria = dto.ValorDiaria,
+                Ativo = dto.Ativo
+            };
+
             await _app.Atualizar(categoria);
             if (categoria.Notificacoes.Any())
-                return ErroBusiness(string.Join(", ", categoria.Notificacoes.Select(n => n.Mensagem)));
+                return ErroValidacao(categoria.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
 
             return Sucesso(categoria);
         }
 
+        ///<summary>Remove uma categoria pelo ID.</summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Excluir(int id)
         {

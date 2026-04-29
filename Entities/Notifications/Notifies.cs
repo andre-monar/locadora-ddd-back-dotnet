@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace Entities.Notifications
@@ -15,9 +16,11 @@ namespace Entities.Notifications
         }
 
         [NotMapped]
+        [JsonIgnore]
         public string NomePropriedade { get; set; }
 
         [NotMapped]
+        [JsonIgnore]
         public string Mensagem { get; set; }
 
         [NotMapped]
