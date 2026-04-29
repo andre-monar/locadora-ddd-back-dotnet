@@ -18,15 +18,15 @@ namespace Entities.Entities
         public int Id { get; set; }
 
         [Display(Name = "Carro")]
-        [ForeignKey("TB_CARRO")]
+        [ForeignKey("Carro")]
         [Column(Order = 1)]
         [Required]
         public int IdCarro { get; set; }
         public virtual Carro Carro { get; set; }
 
         [Display(Name = "Cliente")]
-        [ForeignKey("TB_CLIENTE")]
-        [Column(Order = 1)]
+        [ForeignKey("Cliente")]
+        [Column(Order = 2)]
         [Required]
         public int IdCliente { get; set; }
         public virtual Cliente Cliente { get; set; }

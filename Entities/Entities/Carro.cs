@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Entities
 {
-    [Table("TB_CAR")]
+    [Table("TB_CARRO")]
     public class Carro : Notifies
     {
         [Column("CAR_ID")]

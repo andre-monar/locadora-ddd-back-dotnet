@@ -1,5 +1,4 @@
-﻿using Domain.Interfaces.InterfaceCliente;
-using Domain.Interfaces.InterfaceProduct;
+﻿using Domain.Interfaces.InterfaceCarro;
 using Domain.Interfaces.InterfaceServices;
 using Entities.Entities;
 using Entities.Notifications;
@@ -37,7 +36,7 @@ namespace Domain.Services
 
             // Regra de domínio: ano máximo
             if (carro.Ano > DateTime.Now.Year + 1)
-                carro.Notificacoes.Add(new Notifies { NomePropriedade = "Ano", mensagem = "Ano não pode ser maior que o ano atual + 1" });
+                carro.Notificacoes.Add(new Notifies { NomePropriedade = "Ano", Mensagem = "Ano não pode ser maior que o ano atual + 1" });
 
             if (validaModelo && validaMarca && validaPlaca && validaCor && validaAno && validaCategoria && validaImagemUrl
                 && !carro.Notificacoes.Any())
@@ -58,7 +57,7 @@ namespace Domain.Services
             var validaImagemUrl = carro.ValidarString(carro.ImagemUrl, "URL da Imagem", obrigatorio: false);
 
             if (carro.Ano > DateTime.Now.Year + 1)
-                carro.Notificacoes.Add(new Notifies { NomePropriedade = "Ano", mensagem = "Ano não pode ser maior que o ano atual + 1" });
+                carro.Notificacoes.Add(new Notifies { NomePropriedade = "Ano", Mensagem = "Ano não pode ser maior que o ano atual + 1" });
 
             if (validaModelo && validaMarca && validaPlaca && validaCor && validaAno && validaCategoria && validaImagemUrl
                 && !carro.Notificacoes.Any())

@@ -18,7 +18,7 @@ namespace Entities.Notifications
         public string NomePropriedade { get; set; }
 
         [NotMapped]
-        public string mensagem { get; set; }
+        public string Mensagem { get; set; }
 
         [NotMapped]
         public List<Notifies> Notificacoes;
@@ -29,7 +29,7 @@ namespace Entities.Notifications
             Notificacoes.Add(new Notifies
             {
                 NomePropriedade = propriedade,
-                mensagem = msg
+                Mensagem = msg
             });
         }
 
@@ -205,8 +205,8 @@ namespace Entities.Notifications
             }
             try
             {
-                var NotificationsAddr = new System.Net.Mail.MailNotificationsAddress(email);
-                if (NotificationsAddr.NotificationsAddress != email)
+                var NotificationsAddr = new System.Net.Mail.MailAddress(email);
+                if (NotificationsAddr.Address != email)
                 {
                     NotificationsAdd(nomePropriedade, "E-mail inválido");
                     return false;

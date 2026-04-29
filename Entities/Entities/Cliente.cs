@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace Entities.Entities
 {
+    [Table("TB_CLIENTE")]
     public class Cliente : Notifies
     {
         [Column("CLI_ID")]

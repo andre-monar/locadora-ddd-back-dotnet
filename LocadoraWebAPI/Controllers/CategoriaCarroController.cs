@@ -1,6 +1,4 @@
-﻿// WebAPI/Controllers/CategoriaCarroController.cs
-using Application.Interfaces;
-using ApplicationApp.Interfaces;
+﻿using ApplicationApp.Interfaces;
 using Entities.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -37,7 +35,7 @@ namespace WebAPI.Controllers
         {
             await _app.Adicionar(categoria);
             if (categoria.Notificacoes.Any())
-                return ErroBusiness(string.Join(", ", categoria.Notificacoes.Select(n => n.mensagem)));
+                return ErroBusiness(string.Join(", ", categoria.Notificacoes.Select(n => n.Mensagem)));
 
             return Criado(categoria);
         }
@@ -48,7 +46,7 @@ namespace WebAPI.Controllers
             categoria.Id = id;
             await _app.Atualizar(categoria);
             if (categoria.Notificacoes.Any())
-                return ErroBusiness(string.Join(", ", categoria.Notificacoes.Select(n => n.mensagem)));
+                return ErroBusiness(string.Join(", ", categoria.Notificacoes.Select(n => n.Mensagem)));
 
             return Sucesso(categoria);
         }

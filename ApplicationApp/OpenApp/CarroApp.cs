@@ -1,6 +1,5 @@
 ﻿using ApplicationApp.Interfaces;
 using Domain.Interfaces.InterfaceCarro;
-using Domain.Interfaces.InterfaceProduct;
 using Domain.Interfaces.InterfaceServices;
 using Entities.Entities;
 using System.Collections.Generic;
@@ -8,25 +7,24 @@ using System.Threading.Tasks;
 
 namespace ApplicationApp.OpenApp
 {
-    public class CarroApp : IGenericApp<Carro>, ICarroApp
+    public class CarroApp : GenericApp<Carro>, ICarroApp
     {
         private readonly ICarroService _service;
+        private readonly ICarro _carroRepo;
 
-        public CarroApp(ICarro repo, ICarroService service)
-            : base(repo) // passa o repo pro AppGenerica
+        public CarroApp(ICarro repo, ICarroService service) : base(repo)
         {
+            _carroRepo = repo;
             _service = service;
         }
 
-        public async Task Adicionar(Carro carro) =>
-            await _service.AddCarro(carro); // usa o service (tem validação)
+        public override async Task Adicionar(Carro carro) =>
+            await _service.AddCarro(carro);
 
-        public async Task Atualizar(Carro carro) =>
-            await _service.UpdateCarro(carro); // usa o service (tem validação)
+        public override async Task Atualizar(Carro carro) =>
+            await _service.UpdateCarro(carro);
 
-        // ListarDisponiveis: método exclusivo do Carro
-        // implementação vai no RepositoryCarro depois
         public async Task<List<Carro>> ListarDisponiveis() =>
-            await _service.ListarDisponiveis();
+            await _carroRepo.ListarCarrosDisponiveis();
     }
 }

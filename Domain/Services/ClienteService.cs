@@ -3,6 +3,7 @@
 using Domain.Interfaces.InterfaceCliente;
 using Domain.Interfaces.InterfaceServices;
 using Entities.Entities;
+using Entities.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -27,6 +28,13 @@ namespace Domain.Services
             var validaCEP = cliente.ValidarCEP(cliente.CEP, "CEP", obrigatorio: false); // opcional
             var validaDataNasc = cliente.ValidarData(cliente.DataNascimento, "Data de Nascimento");
 
+            // Regras unicidade
+            if (validaCPF && await _ICliente.CPFJaExiste(cliente.CPF))
+                cliente.Notificacoes.Add(new Notifies { NomePropriedade = "CPF", Mensagem = "CPF já cadastrado" });
+
+            if (validaEmail && await _ICliente.EmailJaExiste(cliente.Email))
+                cliente.Notificacoes.Add(new Notifies { NomePropriedade = "Email", Mensagem = "E-mail já cadastrado" });
+
             if (validaNome && validaCPF && validaEmail && validaCelular && validaCEP && validaDataNasc)
             {
                 cliente.DataCriacao = DateTime.Now;
@@ -44,7 +52,14 @@ namespace Domain.Services
             var validaCEP = cliente.ValidarCEP(cliente.CEP, "CEP", obrigatorio: false); // opcional
             var validaDataNasc = cliente.ValidarData(cliente.DataNascimento, "Data de Nascimento");
 
-            if (validaCPF && validaNome && validaEmail && validaCelular && validaCEP && validaDataNascimento)
+            // Regras de unicidade (ignora o próprio cliente)
+            if (validaCPF && await _ICliente.CPFJaExiste(cliente.CPF, cliente.Id))
+                cliente.Notificacoes.Add(new Notifies { NomePropriedade = "CPF", Mensagem = "CPF já cadastrado" });
+
+            if (validaEmail && await _ICliente.EmailJaExiste(cliente.Email, cliente.Id))
+                cliente.Notificacoes.Add(new Notifies { NomePropriedade = "Email", Mensagem = "E-mail já cadastrado" });
+
+            if (validaCPF && validaNome && validaEmail && validaCelular && validaCEP && validaDataNasc)
             {
                 cliente.DataAlteracao = DateTime.Now;
                 await _ICliente.Add(cliente);

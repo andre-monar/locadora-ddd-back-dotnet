@@ -15,10 +15,14 @@ namespace ApplicationApp.OpenApp
             _service = service;
         }
 
-        public override async Task Adicionar(Alocacao obj)
-            => await _service.AddAlocacao(obj);
+        // Passa pelo Service porque tem regras de negócio:
+        // cálculo de ValorTotal, validação de datas, status automático
+        public override async Task Adicionar(Alocacao alocacao) =>
+            await _service.AddAlocacao(alocacao);
 
-        public override async Task Atualizar(Alocacao obj)
-            => await _service.UpdateAlocacao(obj);
+        public override async Task Atualizar(Alocacao alocacao) =>
+            await _service.UpdateAlocacao(alocacao);
+
+        // Deletar, BuscarPorId e Listar herdam do GenericApp
     }
 }

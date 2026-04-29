@@ -1,6 +1,7 @@
 ﻿// Infrastructure/Repository/Repositories/RepositoryCarro.cs
 using Domain.Interfaces.InterfaceCarro;
 using Entities.Entities;
+using Entities.Entities.Enums;
 using Infrastructure.Configuration;
 using Infrastructure.Repository.Generics;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +18,11 @@ namespace Infrastructure.Repository.Repositories
         {
             using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
             {
-                // Carro disponível se não houver alocação com status Ativo (2)
+                // Carro disponível se não houver alocação com status Ativo
                 return await data.Set<Carro>()
                     .Include(c => c.Categoria)
                     .Where(c => c.Ativo && !data.Set<Alocacao>()
-                        .Any(a => a.IdCarro == c.Id && a.Status == Enums.AlocacaoStatusEnum.Ativo))
+                        .Any(a => a.IdCarro == c.Id && a.Status == AlocacaoStatusEnum.Ativo))
                     .AsNoTracking()
                     .ToListAsync();
             }

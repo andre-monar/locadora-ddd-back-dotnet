@@ -1,5 +1,4 @@
-﻿using ApplicationApp.Interfaces;
-using Domain.Interfaces.Generics;
+﻿using Domain.Interfaces.Generics;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,13 +13,13 @@ namespace ApplicationApp.OpenApp
             _repo = repo;
         }
 
-        public async Task Adicionar(T objeto) =>
+        public virtual async Task Adicionar(T objeto) =>
             await _repo.Add(objeto);
 
-        public async Task Atualizar(T objeto) =>
+        public virtual async Task Atualizar(T objeto) =>
             await _repo.Update(objeto);
 
-        public async Task Deletar(T objeto) =>
+        public virtual async Task Deletar(T objeto) =>
             await _repo.Delete(objeto);
 
         public async Task<T> BuscarPorId(int id) =>
