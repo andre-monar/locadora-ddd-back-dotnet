@@ -45,7 +45,7 @@ namespace Infrastructure.Configuration
 
         private string GetStringConectionConfig()
         {
-            return "Host=127.0.0.1;Port=5432;Database=locadora;Username=postgres;Password=1234";
+            return "Host=postgres;Port=5432;Database=locadora;Username=postgres;Password=1234";
         }
     }
 }

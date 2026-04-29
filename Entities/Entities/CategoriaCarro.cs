@@ -34,6 +34,7 @@ namespace Entities.Entities
         [Required]
         public bool Ativo { get; set; } = true;
 
+        [NotMapped]
         public virtual ICollection<Carro> Carros { get; set; }
     }
 }

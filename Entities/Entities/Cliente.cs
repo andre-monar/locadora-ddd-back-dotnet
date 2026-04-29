@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 namespace Entities.Entities
 {
     [Table("TB_CLIENTE")]
@@ -71,6 +72,8 @@ namespace Entities.Entities
         public DateTime DataAlteracao { get; set; }
 
         // Relacionamento 1:N com Alocacao
+        [NotMapped]
+        [JsonIgnore]
         public virtual ICollection<Alocacao> Alocacoes { get; set; }    
     }
 }

@@ -20,6 +20,21 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "5050:80"
+    depends_on:
+      - postgres
+
+  webapi:
+    build:
+      context: .
+      dockerfile: LocadoraWebAPI/Dockerfile
+    container_name: locadora-api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=locadora;Username=postgres;Password=1234
+    depends_on:
+      - postgres
 
 volumes:
   pgdata:

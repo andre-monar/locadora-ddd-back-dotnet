@@ -70,6 +70,7 @@ namespace Entities.Entities
         public DateTime DataAlteracao { get; set; }
 
         // relacionamento com Alocacao para verificar disponibilidade
+        [NotMapped]
         public virtual ICollection<Alocacao> Alocacoes { get; set; }
     }
 }
