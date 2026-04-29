@@ -6,10 +6,10 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Interfaces.InterfaceProduct
+namespace Domain.Interfaces.InterfaceCarro
 {
     public interface ICarro : IGeneric<Carro>
     {
-        // todo: métodos específicos de Carro, ex: ListarCarrosDisponiveis, ListarCarrosPorMarca, etc
+        Task<List<Carro>> ListarCarrosDisponiveis();
     }
 }

@@ -59,7 +59,7 @@ namespace Entities.Entities
         [Column("CLI_ATIVO")]
         [Display(Name = "Ativo")]
         [Required]
-        public bool Ativo { get; set; } = true;
+        public bool Ativo { get; set; }
 
         [Column("CLI_DATA_CRIACAO")]
         [Display(Name = "Data de Criação")]

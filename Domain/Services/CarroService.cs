@@ -1,8 +1,11 @@
-﻿using Domain.Interfaces.InterfaceProduct;
+﻿using Domain.Interfaces.InterfaceCliente;
+using Domain.Interfaces.InterfaceProduct;
 using Domain.Interfaces.InterfaceServices;
 using Entities.Entities;
+using Entities.Notifications;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -10,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Services
 {
-    public class CarroService : IServiceCarro
+    public class CarroService : ICarroService
     {
 
         private readonly ICarro _ICarro;
@@ -22,43 +25,47 @@ namespace Domain.Services
 
         public async Task AddCarro(Carro carro)
         {
-            var validaModelo = carro.ValidarPropriedadeString(carro.Modelo, "Modelo");
-            var validaMarca = carro.ValidarPropriedadeString(carro.Marca, "Marca");
-            var validaPlaca = carro.ValidarPropriedadeString(carro.Placa, "Placa");
-            // grupo n precisa, enum "autovalida"
-            
-            if (validaModelo && validaMarca && validaPlaca)
+            // Validações de formato (via Notifies)
+            var validaModelo = carro.ValidarString(carro.Modelo, "Modelo");
+            var validaMarca = carro.ValidarString(carro.Marca, "Marca");
+            var validaPlaca = carro.ValidarPlaca(carro.Placa, "Placa");
+            var validaCor = carro.ValidarString(carro.Cor, "Cor");
+            // apenas valores pos 1990:
+            var validaAno = carro.ValidarInt(carro.Ano, "Ano", minimo: 1990); 
+            var validaCategoria = carro.ValidarInt(carro.IdCategoria, "Categoria", minimo: 1);
+            var validaImagemUrl = carro.ValidarString(carro.ImagemUrl, "URL da Imagem", obrigatorio: false);
+
+            // Regra de domínio: ano máximo
+            if (carro.Ano > DateTime.Now.Year + 1)
+                carro.Notificacoes.Add(new Notifies { NomePropriedade = "Ano", mensagem = "Ano não pode ser maior que o ano atual + 1" });
+
+            if (validaModelo && validaMarca && validaPlaca && validaCor && validaAno && validaCategoria && validaImagemUrl
+                && !carro.Notificacoes.Any())
             {
                 carro.DataAlteracao = DateTime.Now;
                 await _ICarro.Add(carro);
             }
-            // todo validação imagem?url?
         }
-
-        //public async Task<List<Carro>> ListarProdutosComEstoque(string descricao)
-        //{
-        //    if (string.IsNullOrWhiteSpace(descricao))
-        //        return await _IProduct.ListarProdutos(p => p.QtdEstoque > 0);
-        //    else
-        //    {
-        //        return await _IProduct.ListarProdutos(p => p.QtdEstoque > 0
-        //        && p.Nome.ToUpper().Contains(descricao.ToUpper()));
-        //    }
-        //}
 
         public async Task UpdateCarro(Carro carro)
         {
-            var validaModelo = carro.ValidarPropriedadeString(carro.Modelo, "Modelo");
-            var validaMarca = carro.ValidarPropriedadeString(carro.Marca, "Marca");
-            var validaPlaca = carro.ValidarPropriedadeString(carro.Placa, "Placa");
-            // grupo n precisa, enum "autovalida"
+            var validaModelo = carro.ValidarString(carro.Modelo, "Modelo");
+            var validaMarca = carro.ValidarString(carro.Marca, "Marca");
+            var validaPlaca = carro.ValidarPlaca(carro.Placa, "Placa");
+            var validaCor = carro.ValidarString(carro.Cor, "Cor");
+            var validaAno = carro.ValidarInt(carro.Ano, "Ano", minimo: 1990);
+            var validaCategoria = carro.ValidarInt(carro.IdCategoria, "Categoria", minimo: 1);
+            var validaImagemUrl = carro.ValidarString(carro.ImagemUrl, "URL da Imagem", obrigatorio: false);
 
-            if (validaModelo && validaMarca && validaPlaca)
+            if (carro.Ano > DateTime.Now.Year + 1)
+                carro.Notificacoes.Add(new Notifies { NomePropriedade = "Ano", mensagem = "Ano não pode ser maior que o ano atual + 1" });
+
+            if (validaModelo && validaMarca && validaPlaca && validaCor && validaAno && validaCategoria && validaImagemUrl
+                && !carro.Notificacoes.Any())
             {
                 carro.DataAlteracao = DateTime.Now;
                 await _ICarro.Update(carro);
             }
-            // todo validação imagem?url?
         }
     }
 }

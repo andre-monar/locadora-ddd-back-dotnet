@@ -9,6 +9,7 @@ namespace Domain.Interfaces.InterfaceCliente
 {
     public interface ICliente : IGeneric<Cliente>
     {
-        // todo métodos específicos de Cliente, ex: ListarClientesPorNome, ListarClientesPorEmail, etc
+        Task<bool> CPFJaExiste(string cpf, int? idIgnorar = null);
+        Task<bool> EmailJaExiste(string email, int? idIgnorar = null);
     }
 }

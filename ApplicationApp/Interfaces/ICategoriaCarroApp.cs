@@ -2,7 +2,7 @@
 
 namespace ApplicationApp.Interfaces
 {
-    public interface IAlocacaoApp : IGenericApp<Alocacao>
+    public interface ICategoriaCarroApp : IGenericApp<CategoriaCarro>
     {
     }
 }

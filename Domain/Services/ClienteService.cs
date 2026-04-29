@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Services
 {
-    public class ClienteService : IServiceCliente
+    public class ClienteService : IClienteService
     {
         private readonly ICliente _ICliente;
 
@@ -20,74 +20,35 @@ namespace Domain.Services
 
         public async Task AddCliente(Cliente cliente)
         {
-            // Validações de campo
+            var validaNome = cliente.ValidarString(cliente.Nome, "Nome");
             var validaCPF = cliente.ValidarCPF(cliente.CPF, "CPF");
-            var validaCNH = cliente.ValidarCNH(cliente.CNH, "CNH");
-            var validaNome = cliente.ValidarPropriedadeString(cliente.Nome, "Nome");
             var validaEmail = cliente.ValidarEmail(cliente.Email, "Email");
             var validaCelular = cliente.ValidarCelular(cliente.Celular, "Celular");
-            var validaCEP = cliente.ValidarCEP(cliente.CEP, "CEP");
+            var validaCEP = cliente.ValidarCEP(cliente.CEP, "CEP", obrigatorio: false); // opcional
+            var validaDataNasc = cliente.ValidarData(cliente.DataNascimento, "Data de Nascimento");
 
-            // Validação de estado (bool, só precisa verificar se foi informado)
-            // Estado é opcional, padrão pode ser true/false conforme regra
-
-            if (validaCPF && validaCNH && validaNome && validaEmail && validaCelular && validaCEP)
+            if (validaNome && validaCPF && validaEmail && validaCelular && validaCEP && validaDataNasc)
             {
+                cliente.DataCriacao = DateTime.Now;
                 cliente.DataAlteracao = DateTime.Now;
-                cliente.Estado = true; // Ativo por padrão no cadastro
                 await _ICliente.Add(cliente);
-            }
-            else
-            {
-                // As notificações já foram adicionadas nos métodos de validação
-                // Você pode logar ou apenas retornar
             }
         }
 
         public async Task UpdateCliente(Cliente cliente)
         {
-            // Validações de campo
+            var validaNome = cliente.ValidarString(cliente.Nome, "Nome");
             var validaCPF = cliente.ValidarCPF(cliente.CPF, "CPF");
-            var validaCNH = cliente.ValidarCNH(cliente.CNH, "CNH");
-            var validaNome = cliente.ValidarPropriedadeString(cliente.Nome, "Nome");
             var validaEmail = cliente.ValidarEmail(cliente.Email, "Email");
             var validaCelular = cliente.ValidarCelular(cliente.Celular, "Celular");
-            var validaCEP = cliente.ValidarCEP(cliente.CEP, "CEP");
+            var validaCEP = cliente.ValidarCEP(cliente.CEP, "CEP", obrigatorio: false); // opcional
+            var validaDataNasc = cliente.ValidarData(cliente.DataNascimento, "Data de Nascimento");
 
-            if (validaCPF && validaCNH && validaNome && validaEmail && validaCelular && validaCEP)
+            if (validaCPF && validaNome && validaEmail && validaCelular && validaCEP && validaDataNascimento)
             {
                 cliente.DataAlteracao = DateTime.Now;
-                await _ICliente.Update(cliente);
+                await _ICliente.Add(cliente);
             }
-        }
-
-        public async Task DeleteCliente(int id)
-        {
-            var cliente = await _ICliente.GetEntityById(id);
-            if (cliente != null)
-            {
-                await _ICliente.Delete(cliente);
-            }
-        }
-
-        public async Task<Cliente> GetClienteById(int id)
-        {
-            return await _ICliente.GetEntityById(id);
-        }
-
-        public async Task<List<Cliente>> ListarClientes()
-        {
-            return await _ICliente.List();
-        }
-
-        public async Task<List<Cliente>> ListarClientesAtivos()
-        {
-            return await _ICliente.ListarClientesAtivos(); // Método que você precisa criar na interface
-        }
-
-        public async Task<bool> CPFJaExiste(string cpf, int? idIgnorar = null)
-        {
-            return await _ICliente.CPFJaExiste(cpf, idIgnorar);
         }
     }
 }

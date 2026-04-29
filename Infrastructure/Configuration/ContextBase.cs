@@ -17,7 +17,7 @@ namespace Infrastructure.Configuration
         public DbSet<Carro> Carro { get; set; }
         public DbSet<Alocacao> Alocacao { get; set; }
         public DbSet<Cliente> Cliente { get; set; }
-
+        public DbSet<CategoriaCarro> CategoriaCarro { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -48,6 +48,11 @@ namespace Infrastructure.Configuration
 
             builder.Entity<Cliente>()
                 .HasIndex(c => c.Email)
+                .IsUnique();
+
+            // Índice único nome CategoriaCarro
+            builder.Entity<CategoriaCarro>()
+                .HasIndex(c => c.Nome)
                 .IsUnique();
 
             base.OnModelCreating(builder);

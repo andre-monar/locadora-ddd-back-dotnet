@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repository.Generics
 {
-    public class RepositoryGenerics<T> : IGeneric<T>, IDisposable where T : class
+    public class GenericRepository<T> : IGeneric<T>, IDisposable where T : class
     {
         private readonly DbContextOptions<ContextBase> _OptionsBuilder;
 
-        public RepositoryGenerics()
+        public GenericRepository()
         {
             _OptionsBuilder = new DbContextOptions<ContextBase>();
         }

@@ -10,9 +10,9 @@ namespace ApplicationApp.OpenApp
 {
     public class CarroApp : IGenericApp<Carro>, ICarroApp
     {
-        private readonly IServiceCarro _service;
+        private readonly ICarroService _service;
 
-        public CarroApp(ICarro repo, IServiceCarro service)
+        public CarroApp(ICarro repo, ICarroService service)
             : base(repo) // passa o repo pro AppGenerica
         {
             _service = service;
