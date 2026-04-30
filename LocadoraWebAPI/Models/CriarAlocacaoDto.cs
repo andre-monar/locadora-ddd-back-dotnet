@@ -16,11 +16,11 @@ namespace LocadoraWebAPI.Models
         public AlocacaoStatusEnum Status { get; set; }
 
         [Required(ErrorMessage = "Data de Retirada é obrigatória")]
-        public DateTime DataRetirada { get; set; }
+        public DateOnly DataRetirada { get; set; }
 
-        public DateTime? DataDevolucao { get; set; }
+        public DateOnly? DataDevolucao { get; set; }
 
         [Required(ErrorMessage = "Data Prevista de Devolução é obrigatória")]
-        public DateTime DataPrevistaDevolucao { get; set; }
+        public DateOnly DataPrevistaDevolucao { get; set; }
     }
 }

@@ -27,6 +27,16 @@ namespace Infrastructure.Repository.Repositories
                     .ToListAsync();
             }
         }
+        public async Task<List<Carro>> ListarCarrosComCategoria()
+        {
+            using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
+            {
+                return await data.Set<Carro>()
+                    .Include(c => c.Categoria)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+        }
 
         public async Task<bool> PlacaJaExiste(string placa, int? idIgnorar = null)
         {

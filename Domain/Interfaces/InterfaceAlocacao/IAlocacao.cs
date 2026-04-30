@@ -10,5 +10,6 @@ namespace Domain.Interfaces.InterfaceAlocacao
 {
     public interface IAlocacao : IGeneric<Alocacao>
     {
+        Task<List<Alocacao>> ListarComRelacionamentos();
     }
 }

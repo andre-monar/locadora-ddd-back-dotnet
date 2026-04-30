@@ -49,9 +49,9 @@ namespace Entities.Notifications
         }
         public bool ValidarInt(int valor, string nomePropriedade, bool obrigatorio = true, int minimo = 0)
         {
-            if (obrigatorio && valor <= minimo)
+            if (obrigatorio && valor < minimo)
             {
-                NotificationsAdd(nomePropriedade, $"Valor deve ser maior que {minimo}");
+                NotificationsAdd(nomePropriedade, $"Valor deve ser no mínimo {minimo}");
                 return false;
             }
             return true;
@@ -59,9 +59,9 @@ namespace Entities.Notifications
 
         public bool ValidarDecimal(decimal valor, string nomePropriedade, bool obrigatorio = true, decimal minimo = 0)
         {
-            if (obrigatorio && valor <= minimo)
+            if (obrigatorio && valor < minimo)
             {
-                NotificationsAdd(nomePropriedade, $"Valor deve ser maior que {minimo}");
+                NotificationsAdd(nomePropriedade, $"Valor deve ser no mínimo {minimo}");
                 return false;
             }
             return true;
@@ -79,7 +79,7 @@ namespace Entities.Notifications
             if (!Regex.IsMatch(placa, @"^[A-Z]{3}[0-9]{4}$") &&
                 !Regex.IsMatch(placa, @"^[A-Z]{3}[0-9][A-Z][0-9]{2}$"))
             {
-                NotificationsAdd(nomePropriedade, "Placa inválida. Use AAA-1234 ou AAA1A23");
+                NotificationsAdd(nomePropriedade, "Placa inválida. Use AAA1234 ou AAA1A23");
                 return false;
             }
             return true;

@@ -26,7 +26,7 @@ namespace Domain.Services
             var validaEmail = cliente.ValidarEmail(cliente.Email, "Email");
             var validaCelular = cliente.ValidarCelular(cliente.Celular, "Celular");
             var validaCEP = cliente.ValidarCEP(cliente.CEP, "CEP", obrigatorio: false); // opcional
-            var validaDataNasc = cliente.ValidarData(cliente.DataNascimento, "Data de Nascimento");
+            var validaDataNasc = cliente.ValidarData(cliente.DataNascimento.ToDateTime(TimeOnly.MinValue), "Data de Nascimento");
 
             // Regras unicidade
             if (validaCPF && await _ICliente.CPFJaExiste(cliente.CPF))
@@ -37,8 +37,9 @@ namespace Domain.Services
 
             if (validaNome && validaCPF && validaEmail && validaCelular && validaCEP && validaDataNasc)
             {
-                cliente.DataCriacao = DateTime.Now;
-                cliente.DataAlteracao = DateTime.Now;
+                cliente.DataCriacao = DateTime.UtcNow;
+                cliente.DataAlteracao = DateTime.UtcNow;
+                
                 await _ICliente.Add(cliente);
             }
         }
@@ -50,7 +51,7 @@ namespace Domain.Services
             var validaEmail = cliente.ValidarEmail(cliente.Email, "Email");
             var validaCelular = cliente.ValidarCelular(cliente.Celular, "Celular");
             var validaCEP = cliente.ValidarCEP(cliente.CEP, "CEP", obrigatorio: false); // opcional
-            var validaDataNasc = cliente.ValidarData(cliente.DataNascimento, "Data de Nascimento");
+            var validaDataNasc = cliente.ValidarData(cliente.DataNascimento.ToDateTime(TimeOnly.MinValue), "Data de Nascimento");
 
             // Regras de unicidade (ignora o próprio cliente)
             if (validaCPF && await _ICliente.CPFJaExiste(cliente.CPF, cliente.Id))
@@ -61,8 +62,8 @@ namespace Domain.Services
 
             if (validaCPF && validaNome && validaEmail && validaCelular && validaCEP && validaDataNasc)
             {
-                cliente.DataAlteracao = DateTime.Now;
-                await _ICliente.Add(cliente);
+                cliente.DataAlteracao = DateTime.UtcNow;
+                await _ICliente.Update(cliente);
             }
         }
     }

@@ -21,7 +21,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Listar()
         {
-            var alocacoes = await _alocacaoApp.Listar();
+            var alocacoes = await _alocacaoApp.ListarComRelacionamentos();
             return Sucesso(alocacoes);
         }
 
@@ -44,7 +44,7 @@ namespace WebAPI.Controllers
                 IdCliente = dto.IdCliente,
                 Status = dto.Status,
                 DataRetirada = dto.DataRetirada,
-                DataDevolucao = dto.DataDevolucao ?? DateTime.MinValue,
+                DataDevolucao = dto.DataDevolucao,
                 DataPrevistaDevolucao = dto.DataPrevistaDevolucao
             };
 
@@ -67,7 +67,7 @@ namespace WebAPI.Controllers
                 IdCliente = dto.IdCliente,
                 Status = dto.Status,
                 DataRetirada = dto.DataRetirada,
-                DataDevolucao = dto.DataDevolucao ?? DateTime.MinValue,
+                DataDevolucao = dto.DataDevolucao,
                 DataPrevistaDevolucao = dto.DataPrevistaDevolucao
             };
 

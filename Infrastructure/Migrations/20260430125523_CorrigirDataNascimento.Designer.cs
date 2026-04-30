@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ContextBase))]
-    partial class ContextBaseModelSnapshot : ModelSnapshot
+    [Migration("20260430125523_CorrigirDataNascimento")]
+    partial class CorrigirDataNascimento
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,6 +96,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("CAR_ATIVO");
 
+                    b.Property<int?>("CategoriaId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Cor")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -136,7 +142,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdCategoria");
+                    b.HasIndex("CategoriaId");
 
                     b.HasIndex("Placa")
                         .IsUnique();
@@ -260,13 +266,13 @@ namespace Infrastructure.Migrations
                     b.HasOne("Entities.Entities.Carro", "Carro")
                         .WithMany("Alocacoes")
                         .HasForeignKey("IdCarro")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Entities.Entities.Cliente", "Cliente")
                         .WithMany("Alocacoes")
                         .HasForeignKey("IdCliente")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Carro");
@@ -278,9 +284,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Entities.Entities.CategoriaCarro", "Categoria")
                         .WithMany("Carros")
-                        .HasForeignKey("IdCategoria")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CategoriaId");
 
                     b.Navigation("Categoria");
                 });

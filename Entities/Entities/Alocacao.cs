@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Entities.Entities
 {
@@ -39,16 +40,16 @@ namespace Entities.Entities
         [Column("ALO_DATA_RETIRADA")]
         [Display(Name = "Data de Retirada")]
         [Required]
-        public DateTime DataRetirada { get; set; }
+        public DateOnly DataRetirada { get; set; }
 
         [Column("ALO_DATA_DEVOLUCAO")]
         [Display(Name = "Data de Devolução")]
-        public DateTime DataDevolucao { get; set; }
+        public DateOnly? DataDevolucao { get; set; }
 
         [Column("ALO_DATA_PREVISTA_DEVOLUCAO")]
         [Display(Name = "Data Prevista de Devolução")]
         [Required]
-        public DateTime DataPrevistaDevolucao { get; set; }
+        public DateOnly DataPrevistaDevolucao { get; set; }
 
         [Column("ALO_VALOR_TOTAL")]
         [Display(Name = "Valor Total")]

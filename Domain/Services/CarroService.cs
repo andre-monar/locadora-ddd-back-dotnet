@@ -34,6 +34,10 @@ namespace Domain.Services
             var validaCategoria = carro.ValidarInt(carro.IdCategoria, "Categoria", minimo: 1);
             var validaImagemUrl = carro.ValidarString(carro.ImagemUrl, "URL da Imagem", obrigatorio: false);
 
+            // verificar placa
+            if (validaPlaca && await _ICarro.PlacaJaExiste(carro.Placa))
+                carro.Notificacoes.Add(new Notifies { NomePropriedade = "Placa", Mensagem = "Placa já cadastrada" });
+
             // Regra de domínio: ano máximo
             if (carro.Ano > DateTime.Now.Year + 1)
                 carro.Notificacoes.Add(new Notifies { NomePropriedade = "Ano", Mensagem = "Ano não pode ser maior que o ano atual + 1" });
@@ -41,7 +45,7 @@ namespace Domain.Services
             if (validaModelo && validaMarca && validaPlaca && validaCor && validaAno && validaCategoria && validaImagemUrl
                 && !carro.Notificacoes.Any())
             {
-                carro.DataAlteracao = DateTime.Now;
+                carro.DataAlteracao = DateTime.UtcNow;
                 await _ICarro.Add(carro);
             }
         }
@@ -62,7 +66,7 @@ namespace Domain.Services
             if (validaModelo && validaMarca && validaPlaca && validaCor && validaAno && validaCategoria && validaImagemUrl
                 && !carro.Notificacoes.Any())
             {
-                carro.DataAlteracao = DateTime.Now;
+                carro.DataAlteracao = DateTime.UtcNow;
                 await _ICarro.Update(carro);
             }
         }

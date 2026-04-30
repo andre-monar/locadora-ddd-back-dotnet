@@ -29,9 +29,9 @@ namespace Domain.Services
             // Validações de formato
             var validaCarro = alocacao.ValidarInt(alocacao.IdCarro, "Carro", minimo: 1);
             var validaCliente = alocacao.ValidarInt(alocacao.IdCliente, "Cliente", minimo: 1);
-            var validaDataRetirada = alocacao.ValidarData(alocacao.DataRetirada, "Data de Retirada");
-            var validaDataPrevista = alocacao.ValidarData(alocacao.DataPrevistaDevolucao, "Data Prevista de Devolução");
-            var validaDatas = alocacao.ValidarDataMaior(alocacao.DataRetirada, alocacao.DataPrevistaDevolucao, "Data Prevista de Devolução");
+            var validaDataRetirada = alocacao.ValidarData(alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue), "Data de Retirada");
+            var validaDataPrevista = alocacao.ValidarData(alocacao.DataPrevistaDevolucao.ToDateTime(TimeOnly.MinValue), "Data Prevista de Devolução");
+            var validaDatas = alocacao.ValidarDataMaior(alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue), alocacao.DataPrevistaDevolucao.ToDateTime(TimeOnly.MinValue), "Data Prevista de Devolução");
 
             // Regra de domínio: calcular ValorTotal
             if (validaCarro && validaCliente)
@@ -42,7 +42,7 @@ namespace Domain.Services
                     var categoria = await _ICategoriaCarro.GetEntityById(carro.IdCategoria);
                     if (categoria != null)
                     {
-                        int dias = (alocacao.DataPrevistaDevolucao - alocacao.DataRetirada).Days;
+                        int dias = (alocacao.DataPrevistaDevolucao.ToDateTime(TimeOnly.MinValue) - alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue)).Days;
                         alocacao.ValorTotal = dias * categoria.ValorDiaria;
                     }
                 }
@@ -52,24 +52,42 @@ namespace Domain.Services
                 && !alocacao.Notificacoes.Any())
             {
                 alocacao.Status = AlocacaoStatusEnum.Ativo;
-                alocacao.DataCriacao = DateTime.Now;
-                alocacao.DataAlteracao = DateTime.Now;
+                alocacao.DataCriacao = DateTime.UtcNow;
+                alocacao.DataAlteracao = DateTime.UtcNow;
                 await _IAlocacao.Add(alocacao);
             }
         }
 
         public async Task UpdateAlocacao(Alocacao alocacao)
         {
-            var validaDataRetirada = alocacao.ValidarData(alocacao.DataRetirada, "Data de Retirada");
-            var validaDataPrevista = alocacao.ValidarData(alocacao.DataPrevistaDevolucao, "Data Prevista de Devolução");
-            var validaDatas = alocacao.ValidarDataMaior(alocacao.DataRetirada, alocacao.DataPrevistaDevolucao, "Data Prevista de Devolução");
+            // Validações de formato
+            var validaCarro = alocacao.ValidarInt(alocacao.IdCarro, "Carro", minimo: 1);
+            var validaCliente = alocacao.ValidarInt(alocacao.IdCliente, "Cliente", minimo: 1);
+            var validaDataRetirada = alocacao.ValidarData(alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue), "Data de Retirada");
+            var validaDataPrevista = alocacao.ValidarData(alocacao.DataPrevistaDevolucao.ToDateTime(TimeOnly.MinValue), "Data Prevista de Devolução");
+            var validaDatas = alocacao.ValidarDataMaior(alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue), alocacao.DataPrevistaDevolucao.ToDateTime(TimeOnly.MinValue), "Data Prevista de Devolução");
 
-            if (alocacao.DataDevolucao != DateTime.MinValue)
-                alocacao.ValidarData(alocacao.DataDevolucao, "Data de Devolução", obrigatorio: false);
-
-            if (validaDataRetirada && validaDataPrevista && validaDatas && !alocacao.Notificacoes.Any())
+            // Regra de domínio: calcular ValorTotal
+            if (validaCarro && validaCliente)
             {
-                alocacao.DataAlteracao = DateTime.Now;
+                var carro = await _ICarro.GetEntityById(alocacao.IdCarro);
+                if (carro != null)
+                {
+                    var categoria = await _ICategoriaCarro.GetEntityById(carro.IdCategoria);
+                    if (categoria != null)
+                    {
+                        int dias = (alocacao.DataPrevistaDevolucao.ToDateTime(TimeOnly.MinValue) - alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue)).Days;
+                        alocacao.ValorTotal = dias * categoria.ValorDiaria;
+                    }
+                }
+            }
+
+            if (validaCarro && validaCliente && validaDataRetirada && validaDataPrevista && validaDatas
+                && !alocacao.Notificacoes.Any())
+            {
+                alocacao.Status = AlocacaoStatusEnum.Ativo;
+                alocacao.DataCriacao = DateTime.UtcNow;
+                alocacao.DataAlteracao = DateTime.UtcNow;
                 await _IAlocacao.Update(alocacao);
             }
         }

@@ -4,10 +4,23 @@ using Entities.Entities;
 using Infrastructure.Configuration;
 using Infrastructure.Repository.Generics;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Repository.Repositories
 {
     public class AlocacaoRepository : GenericRepository<Alocacao>, IAlocacao
     {
+        public async Task<List<Alocacao>> ListarComRelacionamentos()
+        {
+            using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
+            {
+                return await data.Set<Alocacao>()
+                    .Include(a => a.Carro)
+                    .Include(a => a.Cliente)
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+        }
     }
 }

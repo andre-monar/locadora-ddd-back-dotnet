@@ -29,7 +29,7 @@ namespace Entities.Entities
         [Column("CLI_DATA_NASCIMENTO")]
         [Display(Name = "Data de Nascimento")]
         [Required]
-        public DateTime DataNascimento { get; set; }
+        public DateOnly DataNascimento { get; set; }
 
         [Column("CLI_CELULAR")]
         [StringLength(11, MinimumLength = 10, ErrorMessage = "Celular deve ter entre 10 e 11 dígitos")]
@@ -46,7 +46,7 @@ namespace Entities.Entities
         [Column("CLI_CEP")]
         [StringLength(8, MinimumLength = 8, ErrorMessage = "O CEP deve conter exatamente 8 caracteres.")]
         [Display(Name = "CEP")]
-        public string CEP { get; set; }
+        public string? CEP { get; set; }
 
         [Column("CLI_ENDERECO")]
         [MaxLength(255)]

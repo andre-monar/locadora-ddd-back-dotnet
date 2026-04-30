@@ -9,7 +9,7 @@ namespace LocadoraWebAPI.Models
         public string Nome { get; set; }
 
         [MaxLength(500)]
-        public string Descricao { get; set; }
+        public string? Descricao { get; set; }
 
         [Required(ErrorMessage = "Valor da Diária é obrigatório")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Valor deve ser maior que zero")]

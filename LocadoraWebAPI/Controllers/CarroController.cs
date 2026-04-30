@@ -21,7 +21,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Listar()
         {
-            var carros = await _carroApp.Listar();
+            var carros = await _carroApp.ListarComCategoria();
             return Sucesso(carros);
         }
 
@@ -59,6 +59,8 @@ namespace WebAPI.Controllers
             };
 
             await _carroApp.Adicionar(carro);
+            // Recarrega com categoria
+            carro = await _carroApp.BuscarPorId(carro.Id);
 
             if (carro.Notificacoes.Any())
                 return ErroValidacao(carro.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
@@ -84,6 +86,8 @@ namespace WebAPI.Controllers
             };
 
             await _carroApp.Atualizar(carro);
+            // Recarrega com categoria
+            carro = await _carroApp.BuscarPorId(carro.Id);
 
             if (carro.Notificacoes.Any())
                 return ErroValidacao(carro.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));

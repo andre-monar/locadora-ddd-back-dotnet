@@ -26,7 +26,7 @@ namespace LocadoraWebAPI.Models
         public string Cor { get; set; }
 
         [MaxLength(500)]
-        public string ImagemUrl { get; set; }
+        public string? ImagemUrl { get; set; }
 
         [Required(ErrorMessage = "Categoria é obrigatória")]
         public int IdCategoria { get; set; }

@@ -40,6 +40,24 @@ namespace Infrastructure.Configuration
                 .HasIndex(c => c.Email)
                 .IsUnique();
 
+            // integridade referencial
+            builder.Entity<Carro>()
+                .HasOne(c => c.Categoria)
+                .WithMany(cat => cat.Carros)
+                .HasForeignKey(c => c.IdCategoria)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Alocacao>()
+                .HasOne(a => a.Carro)
+                .WithMany(c => c.Alocacoes)
+                .HasForeignKey(a => a.IdCarro)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Alocacao>()
+                .HasOne(a => a.Cliente)
+                .WithMany(c => c.Alocacoes)
+                .HasForeignKey(a => a.IdCliente)
+                .OnDelete(DeleteBehavior.Restrict);
             base.OnModelCreating(builder);
         }
 

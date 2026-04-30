@@ -26,5 +26,8 @@ namespace ApplicationApp.OpenApp
 
         public async Task<List<Carro>> ListarDisponiveis() =>
             await _carroRepo.ListarCarrosDisponiveis();
+
+        public async Task<List<Carro>> ListarComCategoria()
+    => await _carroRepo.ListarCarrosComCategoria();
     }
 }

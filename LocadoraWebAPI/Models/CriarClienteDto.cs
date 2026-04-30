@@ -14,7 +14,7 @@ namespace LocadoraWebAPI.Models
         public string CPF { get; set; }
 
         [Required(ErrorMessage = "Data de Nascimento é obrigatória")]
-        public DateTime DataNascimento { get; set; }
+        public DateOnly DataNascimento { get; set; }
 
         [Required(ErrorMessage = "Celular é obrigatório")]
         [StringLength(11, MinimumLength = 10)]
@@ -26,13 +26,13 @@ namespace LocadoraWebAPI.Models
         public string Email { get; set; }
 
         [StringLength(8, MinimumLength = 8)]
-        public string CEP { get; set; }
+        public string? CEP { get; set; }
 
         [MaxLength(255)]
-        public string Endereco { get; set; }
+        public string? Endereco { get; set; }
 
         [MaxLength(450)]
-        public string ComplementoEndereco { get; set; }
+        public string? ComplementoEndereco { get; set; }
 
         public bool Ativo { get; set; } = true;
     }

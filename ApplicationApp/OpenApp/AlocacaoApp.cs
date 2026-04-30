@@ -2,6 +2,7 @@
 using Domain.Interfaces.InterfaceAlocacao;
 using Domain.Interfaces.InterfaceServices;
 using Entities.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApplicationApp.OpenApp
@@ -9,10 +10,11 @@ namespace ApplicationApp.OpenApp
     public class AlocacaoApp : GenericApp<Alocacao>, IAlocacaoApp
     {
         private readonly IAlocacaoService _service;
-
+        private readonly IAlocacao _alocacaoRepo;
         public AlocacaoApp(IAlocacao repo, IAlocacaoService service) : base(repo)
         {
             _service = service;
+            _alocacaoRepo = repo;
         }
 
         // Passa pelo Service porque tem regras de negócio:
@@ -23,6 +25,9 @@ namespace ApplicationApp.OpenApp
         public override async Task Atualizar(Alocacao alocacao) =>
             await _service.UpdateAlocacao(alocacao);
 
-        // Deletar, BuscarPorId e Listar herdam do GenericApp
+        public async Task<List<Alocacao>> ListarComRelacionamentos()
+            => await _alocacaoRepo.ListarComRelacionamentos();
+
+        // Deletar, BuscarPorId herdam do GenericApp
     }
 }

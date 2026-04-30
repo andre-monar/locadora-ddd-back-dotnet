@@ -10,6 +10,8 @@ namespace Domain.Interfaces.InterfaceCarro
 {
     public interface ICarro : IGeneric<Carro>
     {
+        Task<List<Carro>> ListarCarrosComCategoria();
         Task<List<Carro>> ListarCarrosDisponiveis();
+        Task<bool> PlacaJaExiste(string placa, int? idIgnorar = null);
     }
 }
