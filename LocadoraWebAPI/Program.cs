@@ -15,7 +15,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -48,8 +47,11 @@ builder.Services.AddScoped<ICategoriaCarroApp, CategoriaCarroApp>();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
-    );
-
+    )
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.SuppressModelStateInvalidFilter = true;
+    });
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -62,6 +64,10 @@ if (app.Environment.IsDevelopment())
         db.Database.Migrate();
     }
 }
+app.UseCors(x => x
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
