@@ -13,5 +13,6 @@ namespace Domain.Interfaces.InterfaceCarro
         Task<List<Carro>> ListarCarrosComCategoria();
         Task<List<Carro>> ListarCarrosDisponiveis();
         Task<bool> PlacaJaExiste(string placa, int? idIgnorar = null);
+        Task<bool> TemAlocacoesVinculadas(int carroId);
     }
 }

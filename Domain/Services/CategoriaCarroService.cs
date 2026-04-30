@@ -1,6 +1,7 @@
 ﻿// Domain/Services/CategoriaCarroService.cs
 
 using Domain.Interfaces.InterfaceCategoriaCarro;
+using Domain.Interfaces.InterfaceCliente;
 using Domain.Interfaces.InterfaceServices;
 using Entities.Entities;
 using Entities.Notifications;
@@ -49,6 +50,19 @@ namespace Domain.Services
             {
                 await _ICategoriaCarro.Update(categoria);
             }
+        }
+
+        public async Task DeleteCategoria(CategoriaCarro categoria)
+        {
+            // Verifica se tem alocações vinculadas
+            var temCarros = await _ICategoriaCarro.TemCarrosVinculados(categoria.Id);
+            if (temCarros)
+            {
+                categoria.Notificacoes.Add(new Notifies { NomePropriedade = "Cancelado", Mensagem = "Não é possível excluir esta categoria pois existem carros vinculados." });
+                return;
+            }
+
+            await _ICategoriaCarro.Delete(categoria);
         }
     }
 }

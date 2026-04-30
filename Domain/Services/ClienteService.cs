@@ -6,6 +6,7 @@ using Entities.Entities;
 using Entities.Notifications;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Domain.Services
@@ -35,11 +36,11 @@ namespace Domain.Services
             if (validaEmail && await _ICliente.EmailJaExiste(cliente.Email))
                 cliente.Notificacoes.Add(new Notifies { NomePropriedade = "Email", Mensagem = "E-mail já cadastrado" });
 
-            if (validaNome && validaCPF && validaEmail && validaCelular && validaCEP && validaDataNasc)
+            if (validaNome && validaCPF && validaEmail && validaCelular && validaCEP && validaDataNasc
+    && !cliente.Notificacoes.Any())
             {
                 cliente.DataCriacao = DateTime.UtcNow;
                 cliente.DataAlteracao = DateTime.UtcNow;
-                
                 await _ICliente.Add(cliente);
             }
         }
@@ -60,11 +61,24 @@ namespace Domain.Services
             if (validaEmail && await _ICliente.EmailJaExiste(cliente.Email, cliente.Id))
                 cliente.Notificacoes.Add(new Notifies { NomePropriedade = "Email", Mensagem = "E-mail já cadastrado" });
 
-            if (validaCPF && validaNome && validaEmail && validaCelular && validaCEP && validaDataNasc)
+            if (validaNome && validaCPF && validaEmail && validaCelular && validaCEP && validaDataNasc
+    && !cliente.Notificacoes.Any())
             {
                 cliente.DataAlteracao = DateTime.UtcNow;
                 await _ICliente.Update(cliente);
             }
+        }
+        public async Task DeleteCliente(Cliente cliente)
+        {
+            // Verifica se tem alocações vinculadas
+            var temAlocacoes = await _ICliente.TemAlocacoesVinculadas(cliente.Id);
+            if (temAlocacoes)
+            {
+                cliente.Notificacoes.Add(new Notifies { NomePropriedade = "Cancelado", Mensagem = "Não é possível excluir este cliente pois existem alocações vinculadas." });
+                return;
+            }
+
+            await _ICliente.Delete(cliente);
         }
     }
 }

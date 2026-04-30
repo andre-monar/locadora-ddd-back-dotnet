@@ -1,4 +1,5 @@
 ﻿using Domain.Interfaces.InterfaceCarro;
+using Domain.Interfaces.InterfaceCliente;
 using Domain.Interfaces.InterfaceServices;
 using Entities.Entities;
 using Entities.Notifications;
@@ -69,6 +70,20 @@ namespace Domain.Services
                 carro.DataAlteracao = DateTime.UtcNow;
                 await _ICarro.Update(carro);
             }
+        }
+
+        // Verifica se tem alocação
+        public async Task DeleteCarro(Carro carro)
+        {
+            // Verifica se tem alocações vinculadas
+            var temAlocacoes = await _ICarro.TemAlocacoesVinculadas(carro.Id);
+            if (temAlocacoes)
+            {
+                carro.Notificacoes.Add(new Notifies { NomePropriedade = "Cancelado", Mensagem = "Não é possível excluir este carro pois existem alocações vinculadas." });
+                return;
+            }
+
+            await _ICarro.Delete(carro);
         }
     }
 }

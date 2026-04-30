@@ -1,4 +1,5 @@
 ﻿using ApplicationApp.Interfaces;
+using ApplicationApp.OpenApp;
 using Entities.Entities;
 using LocadoraWebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -100,10 +101,13 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Excluir(int id)
         {
             var carro = await _carroApp.BuscarPorId(id);
-            if (carro == null) return NaoEncontrado("Veículo");
+            if (carro == null) return NaoEncontrado("Carro");
 
             await _carroApp.Deletar(carro);
-            return Sucesso(new { mensagem = "Veículo removido com sucesso." });
+
+            if (carro.Notificacoes.Any())
+                return ErroValidacao(carro.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
+            return Sucesso(new { mensagem = "Carro removido com sucesso." });
         }
     }
 }

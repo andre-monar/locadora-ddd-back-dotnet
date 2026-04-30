@@ -28,6 +28,9 @@ namespace ApplicationApp.OpenApp
             await _carroRepo.ListarCarrosDisponiveis();
 
         public async Task<List<Carro>> ListarComCategoria()
-    => await _carroRepo.ListarCarrosComCategoria();
+            => await _carroRepo.ListarCarrosComCategoria();
+
+        public override async Task Deletar(Carro carro)
+            => await _service.DeleteCarro(carro);
     }
 }

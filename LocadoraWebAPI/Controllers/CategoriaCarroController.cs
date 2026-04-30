@@ -1,4 +1,5 @@
 ﻿using ApplicationApp.Interfaces;
+using ApplicationApp.OpenApp;
 using Domain.Interfaces.InterfaceAlocacao;
 using Entities.Entities;
 using LocadoraWebAPI.Models;
@@ -77,10 +78,13 @@ namespace WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Excluir(int id)
         {
-            var obj = await _app.BuscarPorId(id);
-            if (obj == null) return NaoEncontrado("Categoria");
+            var categoria = await _app.BuscarPorId(id);
+            if (categoria == null) return NaoEncontrado("Categoria");
 
-            await _app.Deletar(obj);
+            await _app.Deletar(categoria);
+
+            if (categoria.Notificacoes.Any())
+                return ErroValidacao(categoria.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
             return Sucesso(new { mensagem = "Categoria removida com sucesso." });
         }
     }

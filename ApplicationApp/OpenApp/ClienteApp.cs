@@ -22,6 +22,9 @@ namespace ApplicationApp.OpenApp
         public override async Task Atualizar(Cliente cliente) =>
             await _service.UpdateCliente(cliente);
 
-        // Deletar, BuscarPorId e Listar herdam do GenericApp — sem lógica extra
+        public override async Task Deletar(Cliente cliente)
+            => await _service.DeleteCliente(cliente);
+
+        // BuscarPorId e Listar herdam do GenericApp — sem lógica extra
     }
 }

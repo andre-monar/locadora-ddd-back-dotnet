@@ -24,6 +24,8 @@ namespace ApplicationApp.OpenApp
         public override async Task Atualizar(CategoriaCarro categoria) =>
             await _service.UpdateCategoria(categoria);
 
-        // Deletar, BuscarPorId e Listar herdam do GenericApp
+        public override async Task Deletar(CategoriaCarro categoria)
+            => await _service.DeleteCategoria(categoria);
+        // BuscarPorId e Listar herdam do GenericApp
     }
 }

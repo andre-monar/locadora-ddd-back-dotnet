@@ -7,5 +7,7 @@ namespace Domain.Interfaces.InterfaceCategoriaCarro
     public interface ICategoriaCarro : IGeneric<CategoriaCarro>
     {
         Task<bool> NomeJaExiste(string nome, int? idIgnorar = null);
+        Task<bool> TemCarrosVinculados(int categoriaId);
+
     }
 }

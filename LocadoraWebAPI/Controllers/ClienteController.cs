@@ -93,6 +93,9 @@ namespace WebAPI.Controllers
             if (cliente == null) return NaoEncontrado("Cliente");
 
             await _clienteApp.Deletar(cliente);
+
+            if (cliente.Notificacoes.Any())
+                return ErroValidacao(cliente.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
             return Sucesso(new { mensagem = "Cliente removido com sucesso." });
         }
     }

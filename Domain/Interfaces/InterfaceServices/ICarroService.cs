@@ -7,5 +7,6 @@ namespace Domain.Interfaces.InterfaceServices
     {
         Task AddCarro(Carro carro);
         Task UpdateCarro(Carro carro);
+        Task DeleteCarro(Carro carro);
     }
 }

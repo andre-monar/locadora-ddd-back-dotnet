@@ -8,5 +8,6 @@ namespace Domain.Interfaces.InterfaceServices
     {
         Task AddCategoria(CategoriaCarro categoria);
         Task UpdateCategoria(CategoriaCarro categoria);
+        Task DeleteCategoria(CategoriaCarro categoria);
     }
 }

@@ -7,5 +7,6 @@ namespace Domain.Interfaces.InterfaceServices
     {
         Task AddCliente(Cliente cliente);
         Task UpdateCliente(Cliente cliente);
+        Task DeleteCliente(Cliente cliente);
     }
 }

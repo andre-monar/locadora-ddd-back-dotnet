@@ -38,5 +38,13 @@ namespace Infrastructure.Repository.Repositories
                 return await query.AnyAsync();
             }
         }
+
+        public async Task<bool> TemAlocacoesVinculadas(int clienteId)
+        {
+            using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
+            {
+                return await data.Set<Alocacao>().AnyAsync(a => a.IdCliente == clienteId);
+            }
+        }
     }
 }

@@ -24,5 +24,13 @@ namespace Infrastructure.Repository.Repositories
                 return await query.AnyAsync();
             }
         }
+
+        public async Task<bool> TemCarrosVinculados(int categoriaId)
+        {
+            using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
+            {
+                return await data.Set<Carro>().AnyAsync(c => c.IdCategoria == categoriaId);
+            }
+        }
     }
 }
