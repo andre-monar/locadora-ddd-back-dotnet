@@ -11,6 +11,7 @@ namespace Infrastructure.Repository.Repositories
 {
     public class ClienteRepository : GenericRepository<Cliente>, ICliente
     {
+        public ClienteRepository(ContextBase context) : base(context) { }
         public async Task<bool> CPFJaExiste(string cpf, int? idIgnorar = null)
         {
             using (var data = new ContextBase(new DbContextOptions<ContextBase>()))

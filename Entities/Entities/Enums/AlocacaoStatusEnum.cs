@@ -6,9 +6,8 @@ namespace Entities.Entities.Enums
 {
     public enum AlocacaoStatusEnum
     {
-        Pendente = 1,
-        Ativo = 2,
-        Retornado = 3,
-        Cancelado = 4
+        Ativo = 1,
+        Retornado = 2,
+        Cancelado = 3
     }
 }

@@ -60,11 +60,11 @@ namespace WebAPI.Controllers
             };
 
             await _carroApp.Adicionar(carro);
-            // Recarrega com categoria
-            carro = await _carroApp.BuscarPorId(carro.Id);
 
             if (carro.Notificacoes.Any())
                 return ErroValidacao(carro.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
+            // Recarrega com categoria
+            carro = await _carroApp.BuscarPorId(carro.Id);
 
             return Criado(carro);
         }
@@ -87,12 +87,12 @@ namespace WebAPI.Controllers
             };
 
             await _carroApp.Atualizar(carro);
-            // Recarrega com categoria
-            carro = await _carroApp.BuscarPorId(carro.Id);
+            
 
             if (carro.Notificacoes.Any())
                 return ErroValidacao(carro.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
-
+            // Recarrega com categoria
+            carro = await _carroApp.BuscarPorId(carro.Id);
             return Sucesso(carro);
         }
 

@@ -8,6 +8,6 @@ namespace Domain.Interfaces.InterfaceCategoriaCarro
     {
         Task<bool> NomeJaExiste(string nome, int? idIgnorar = null);
         Task<bool> TemCarrosVinculados(int categoriaId);
-
+        Task<bool> TemCarrosAtivosVinculados(int categoriaId);
     }
 }

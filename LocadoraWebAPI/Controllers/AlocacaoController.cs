@@ -1,5 +1,6 @@
 ﻿using ApplicationApp.Interfaces;
 using Entities.Entities;
+using Entities.Entities.Enums;
 using LocadoraWebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -88,6 +89,39 @@ namespace WebAPI.Controllers
 
             await _alocacaoApp.Deletar(alocacao);
             return Sucesso(new { mensagem = "Alocação removida com sucesso." });
+        }
+
+        /// <summary>Registra a devolução do carro (baixa).</summary>
+        [HttpPut("{id}/baixa")]
+        public async Task<IActionResult> DarBaixa(int id)
+        {
+            var alocacao = await _alocacaoApp.BuscarPorId(id);
+            if (alocacao == null) return NaoEncontrado("Alocação");
+
+            alocacao.Status = AlocacaoStatusEnum.Retornado;
+            alocacao.DataDevolucao = DateOnly.FromDateTime(DateTime.UtcNow);
+            await _alocacaoApp.Atualizar(alocacao);
+
+            if (alocacao.Notificacoes.Any())
+                return ErroValidacao(alocacao.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
+
+            return Sucesso(alocacao);
+        }
+
+        /// <summary>Cancela uma alocação.</summary>
+        [HttpPut("{id}/cancelar")]
+        public async Task<IActionResult> Cancelar(int id)
+        {
+            var alocacao = await _alocacaoApp.BuscarPorId(id);
+            if (alocacao == null) return NaoEncontrado("Alocação");
+
+            alocacao.Status = AlocacaoStatusEnum.Cancelado;
+            await _alocacaoApp.Atualizar(alocacao);
+
+            if (alocacao.Notificacoes.Any())
+                return ErroValidacao(alocacao.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
+
+            return Sucesso(alocacao);
         }
     }
 }

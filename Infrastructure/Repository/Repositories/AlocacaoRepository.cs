@@ -11,6 +11,8 @@ namespace Infrastructure.Repository.Repositories
 {
     public class AlocacaoRepository : GenericRepository<Alocacao>, IAlocacao
     {
+        public AlocacaoRepository(ContextBase context) : base(context) { }
+
         public async Task<List<Alocacao>> ListarComRelacionamentos()
         {
             using (var data = new ContextBase(new DbContextOptions<ContextBase>()))

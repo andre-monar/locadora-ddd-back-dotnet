@@ -64,6 +64,7 @@ namespace Entities.Entities
 
         [Column("CAR_DISPONIVEL")]
         [Display(Name = "Disponível")]
+        [Required]
         public bool Disponivel { get; set; }
 
         [Column("CAR_DATA_ALTERACAO")]

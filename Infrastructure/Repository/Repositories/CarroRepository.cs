@@ -14,6 +14,8 @@ namespace Infrastructure.Repository.Repositories
 {
     public class CarroRepository : GenericRepository<Carro>, ICarro
     {
+        public CarroRepository(ContextBase context) : base(context) { }
+
         public async Task<List<Carro>> ListarCarrosDisponiveis()
         {
             using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
@@ -57,6 +59,16 @@ namespace Infrastructure.Repository.Repositories
             using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
             {
                 return await data.Set<Alocacao>().AnyAsync(a => a.IdCarro == carroId);
+            }
+        }
+
+        public async Task<bool> TemAlocacaoAtiva(int carroId)
+        {
+            using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
+            {
+                return await data.Set<Alocacao>()
+                    .AnyAsync(a => a.IdCarro == carroId &&
+                        (a.Status == AlocacaoStatusEnum.Ativo));
             }
         }
     }

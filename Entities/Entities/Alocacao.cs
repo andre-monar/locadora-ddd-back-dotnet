@@ -53,7 +53,7 @@ namespace Entities.Entities
 
         [Column("ALO_VALOR_TOTAL")]
         [Display(Name = "Valor Total")]
-        public decimal ValorTotal { get; set; }
+        public decimal? ValorTotal { get; set; }
 
         [Column("ALO_DATA_ALTERACAO")]
         [Display(Name = "Data de Alteração")]

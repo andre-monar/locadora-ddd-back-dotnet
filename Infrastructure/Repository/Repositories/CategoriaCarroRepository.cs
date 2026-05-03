@@ -11,6 +11,7 @@ namespace Infrastructure.Repository.Repositories
 {
     public class CategoriaCarroRepository : GenericRepository<CategoriaCarro>, ICategoriaCarro
     {
+        public CategoriaCarroRepository(ContextBase context) : base(context) { }
         public async Task<bool> NomeJaExiste(string nome, int? idIgnorar = null)
         {
             using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
@@ -30,6 +31,15 @@ namespace Infrastructure.Repository.Repositories
             using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
             {
                 return await data.Set<Carro>().AnyAsync(c => c.IdCategoria == categoriaId);
+            }
+        }
+
+        public async Task<bool> TemCarrosAtivosVinculados(int categoriaId)
+        {
+            using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
+            {
+                return await data.Set<Carro>()
+                    .AnyAsync(c => c.IdCategoria == categoriaId && c.Ativo);
             }
         }
     }

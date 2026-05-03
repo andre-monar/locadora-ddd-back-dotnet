@@ -85,7 +85,7 @@ namespace Entities.Notifications
             return true;
         }
 
-        public bool ValidarData(DateTime data, string nomePropriedade, bool obrigatorio = true)
+        public bool ValidarData(DateTime data, string nomePropriedade, bool podeFutura = false, bool obrigatorio = true)
         {
             if (obrigatorio && data == DateTime.MinValue)
             {
@@ -93,7 +93,7 @@ namespace Entities.Notifications
                 return false;
             }
 
-            if (data > DateTime.Now)
+            if (!podeFutura && data > DateTime.Now)
             {
                 NotificationsAdd(nomePropriedade, "Data não pode ser futura");
                 return false;

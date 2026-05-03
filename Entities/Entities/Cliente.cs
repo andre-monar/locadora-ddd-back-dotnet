@@ -44,7 +44,7 @@ namespace Entities.Entities
         public string Email { get; set; }
 
         [Column("CLI_CEP")]
-        [StringLength(8, MinimumLength = 8, ErrorMessage = "O CEP deve conter exatamente 8 caracteres.")]
+        [StringLength(8)]
         [Display(Name = "CEP")]
         public string? CEP { get; set; }
 
