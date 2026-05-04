@@ -15,14 +15,11 @@ namespace Infrastructure.Repository.Repositories
 
         public async Task<List<Alocacao>> ListarComRelacionamentos()
         {
-            using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
-            {
-                return await data.Set<Alocacao>()
-                    .Include(a => a.Carro)
-                    .Include(a => a.Cliente)
-                    .AsNoTracking()
-                    .ToListAsync();
-            }
+            return await _context.Set<Alocacao>()
+                .Include(a => a.Carro)
+                .Include(a => a.Cliente)
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }

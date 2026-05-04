@@ -12,7 +12,7 @@ namespace Infrastructure.Repository.Generics
 {
     public class GenericRepository<T> : IGeneric<T> where T : class
     {
-        private readonly ContextBase _context;
+        protected readonly ContextBase _context;
 
         public GenericRepository(ContextBase context)
         {

@@ -14,38 +14,29 @@ namespace Infrastructure.Repository.Repositories
         public ClienteRepository(ContextBase context) : base(context) { }
         public async Task<bool> CPFJaExiste(string cpf, int? idIgnorar = null)
         {
-            using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
-            {
-                var query = data.Set<Cliente>().AsNoTracking()
-                    .Where(c => c.CPF == cpf);
+            var query = _context.Set<Cliente>().AsNoTracking()
+                .Where(c => c.CPF == cpf);
 
-                if (idIgnorar.HasValue)
-                    query = query.Where(c => c.Id != idIgnorar.Value);
+            if (idIgnorar.HasValue)
+                query = query.Where(c => c.Id != idIgnorar.Value);
 
-                return await query.AnyAsync();
-            }
+            return await query.AnyAsync();
         }
 
         public async Task<bool> EmailJaExiste(string email, int? idIgnorar = null)
         {
-            using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
-            {
-                var query = data.Set<Cliente>().AsNoTracking()
-                    .Where(c => c.Email == email);
+            var query = _context.Set<Cliente>().AsNoTracking()
+                .Where(c => c.Email == email);
 
-                if (idIgnorar.HasValue)
-                    query = query.Where(c => c.Id != idIgnorar.Value);
+            if (idIgnorar.HasValue)
+                query = query.Where(c => c.Id != idIgnorar.Value);
 
-                return await query.AnyAsync();
-            }
+            return await query.AnyAsync();
         }
 
         public async Task<bool> TemAlocacoesVinculadas(int clienteId)
         {
-            using (var data = new ContextBase(new DbContextOptions<ContextBase>()))
-            {
-                return await data.Set<Alocacao>().AnyAsync(a => a.IdCliente == clienteId);
-            }
+            return await _context.Set<Alocacao>().AnyAsync(a => a.IdCliente == clienteId);
         }
     }
 }
