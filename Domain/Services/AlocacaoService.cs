@@ -33,12 +33,12 @@ namespace Domain.Services
             var validaCliente = alocacao.ValidarInt(alocacao.IdCliente, "IdCliente", minimo: 1);
             var validaDataRetirada = alocacao.ValidarData(alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue), "DataRetirada", true);
             var validaDataPrevista = alocacao.ValidarData(alocacao.DataPrevistaDevolucao.ToDateTime(TimeOnly.MinValue), "DataPrevistaDevolucao", true);
-            var validaDatas = alocacao.ValidarDataMaior(alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue), alocacao.DataPrevistaDevolucao.ToDateTime(TimeOnly.MinValue), "DataPrevistaDevolucao");
+            var validaDatas = alocacao.ValidarDataMaiorOuIgual(alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue), alocacao.DataPrevistaDevolucao.ToDateTime(TimeOnly.MinValue), "DataPrevistaDevolucao");
             var validaDataDevolucao = true;
             // se data devolucao existir, validar maior tb
             if (alocacao.DataDevolucao.HasValue)
             {
-                validaDataDevolucao = alocacao.ValidarDataMaior(alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue), alocacao.DataDevolucao.Value.ToDateTime(TimeOnly.MinValue), "DataDevolucao");
+                validaDataDevolucao = alocacao.ValidarDataMaiorOuIgual(alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue), alocacao.DataDevolucao.Value.ToDateTime(TimeOnly.MinValue), "DataDevolucao");
             }
 
             // apenas alocações para carros ativos
@@ -74,7 +74,7 @@ namespace Domain.Services
                         var categoria = await _ICategoriaCarro.GetEntityById(carro.IdCategoria);
                         if (categoria != null)
                         {
-                            int dias = (alocacao.DataDevolucao.Value.ToDateTime(TimeOnly.MinValue)
+                            int dias = 1 + (alocacao.DataDevolucao.Value.ToDateTime(TimeOnly.MinValue)
                                        - alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue)).Days;
                             alocacao.ValorTotal = dias * categoria.ValorDiaria;
                         }

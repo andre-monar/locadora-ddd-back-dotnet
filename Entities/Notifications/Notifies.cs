@@ -103,11 +103,11 @@ namespace Entities.Notifications
 
 
         // Validar se uma data é maior que outra (ex: dataDevolução > dataRetirada)
-        public bool ValidarDataMaior(DateTime dataMenor, DateTime dataMaior, string nomePropriedade)
+        public bool ValidarDataMaiorOuIgual(DateTime dataMenor, DateTime dataMaior, string nomePropriedade)
         {
-            if (dataMaior <= dataMenor)
+            if (dataMaior < dataMenor)
             {
-                NotificationsAdd(nomePropriedade, $"Data de {nomePropriedade} deve ser maior que a data anterior");
+                NotificationsAdd(nomePropriedade, $"Data de {nomePropriedade} deve ser maior/igual que a data anterior");
                 return false;
             }
             return true;
