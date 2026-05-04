@@ -12,5 +12,6 @@ namespace Domain.Interfaces.InterfaceCliente
         Task<bool> CPFJaExiste(string cpf, int? idIgnorar = null);
         Task<bool> EmailJaExiste(string email, int? idIgnorar = null);
         Task<bool> TemAlocacoesVinculadas(int clienteId);
+        Task<bool> TemAlocacoesAtivas(int clienteId);
     }
 }

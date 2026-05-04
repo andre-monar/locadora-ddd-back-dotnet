@@ -1,6 +1,7 @@
 ﻿// Infrastructure/Repository/Repositories/RepositoryCliente.cs
 using Domain.Interfaces.InterfaceCliente;
 using Entities.Entities;
+using Entities.Entities.Enums;
 using Infrastructure.Configuration;
 using Infrastructure.Repository.Generics;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,11 @@ namespace Infrastructure.Repository.Repositories
         public async Task<bool> TemAlocacoesVinculadas(int clienteId)
         {
             return await _context.Set<Alocacao>().AnyAsync(a => a.IdCliente == clienteId);
+        }
+        public async Task<bool> TemAlocacoesAtivas(int clienteId)
+        {
+            return await _context.Set<Alocacao>()
+                .AnyAsync(a => a.IdCliente == clienteId && a.Status == AlocacaoStatusEnum.Ativo);
         }
     }
 }

@@ -35,6 +35,14 @@ namespace Domain.Services
             if (validaEmail && await _ICliente.EmailJaExiste(cliente.Email, idIgnorar))
                 cliente.Notificacoes.Add(new Notifies { NomePropriedade = "Email", Mensagem = "E-mail já cadastrado" });
 
+            // Só podemos inativar clientes que não têm alocações ativas
+            if (!cliente.Ativo)
+            {
+                var temAlocacoesAtivas = await _ICliente.TemAlocacoesAtivas(cliente.Id);
+                if (temAlocacoesAtivas)
+                    cliente.Notificacoes.Add(new Notifies { NomePropriedade = "Ativo", Mensagem = "Não é possível inativar um cliente com alocações ativas" });
+            }
+
             if (validaDataNasc)
             {
                 var hoje = DateOnly.FromDateTime(DateTime.UtcNow);

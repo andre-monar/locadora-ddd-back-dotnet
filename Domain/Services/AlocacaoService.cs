@@ -1,6 +1,7 @@
 ﻿using Domain.Interfaces.InterfaceAlocacao;
 using Domain.Interfaces.InterfaceCarro;
 using Domain.Interfaces.InterfaceCategoriaCarro;
+using Domain.Interfaces.InterfaceCliente;
 using Domain.Interfaces.InterfaceServices;
 using Entities.Entities;
 using Entities.Entities.Enums;
@@ -16,12 +17,14 @@ namespace Domain.Services
         private readonly IAlocacao _IAlocacao;
         private readonly ICarro _ICarro;
         private readonly ICategoriaCarro _ICategoriaCarro;
+        private readonly ICliente _ICliente;
 
-        public AlocacaoService(IAlocacao IAlocacao, ICarro ICarro, ICategoriaCarro ICategoriaCarro)
+        public AlocacaoService(IAlocacao IAlocacao, ICarro ICarro, ICategoriaCarro ICategoriaCarro, ICliente cliente)
         {
             _IAlocacao = IAlocacao;
             _ICarro = ICarro;
             _ICategoriaCarro = ICategoriaCarro;
+            _ICliente = cliente;
         }
 
         private async Task<bool> ValidarAlocacao(Alocacao alocacao, bool isUpdate = false, bool validarDisponibilidade = true)
@@ -31,6 +34,12 @@ namespace Domain.Services
             var validaDataRetirada = alocacao.ValidarData(alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue), "DataRetirada", true);
             var validaDataPrevista = alocacao.ValidarData(alocacao.DataPrevistaDevolucao.ToDateTime(TimeOnly.MinValue), "DataPrevistaDevolucao", true);
             var validaDatas = alocacao.ValidarDataMaior(alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue), alocacao.DataPrevistaDevolucao.ToDateTime(TimeOnly.MinValue), "DataPrevistaDevolucao");
+            var validaDataDevolucao = true;
+            // se data devolucao existir, validar maior tb
+            if (alocacao.DataDevolucao.HasValue)
+            {
+                validaDataDevolucao = alocacao.ValidarDataMaior(alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue), alocacao.DataDevolucao.Value.ToDateTime(TimeOnly.MinValue), "DataDevolucao");
+            }
 
             // apenas alocações para carros ativos
             if (validaCarro)
@@ -42,6 +51,16 @@ namespace Domain.Services
                     alocacao.Notificacoes.Add(new Notifies { NomePropriedade = "IdCarro", Mensagem = "Carro inativo não pode ser alocado" });
                 else if (validarDisponibilidade && !carro.Disponivel)
                     alocacao.Notificacoes.Add(new Notifies { NomePropriedade = "IdCarro", Mensagem = "Carro não está disponível para alocação" });
+            }
+
+            // apenas alocações para clientes ativos
+            if (validaCliente)
+            {
+                var cliente = await _ICliente.GetEntityById(alocacao.IdCliente);
+                if (cliente == null)
+                    alocacao.Notificacoes.Add(new Notifies { NomePropriedade = "IdCliente", Mensagem = "Cliente não encontrado" });
+                else if (!cliente.Ativo)
+                    alocacao.Notificacoes.Add(new Notifies { NomePropriedade = "IdCliente", Mensagem = "Cliente inativo não pode realizar alocações" });
             }
 
             // Calcula ValorTotal só se status for Retornado E tiver data devoluçlão
@@ -66,7 +85,7 @@ namespace Domain.Services
                     alocacao.ValorTotal = null;
                 }
             }
-            return validaCarro && validaCliente && validaDataRetirada && validaDataPrevista && validaDatas
+            return validaCarro && validaCliente && validaDataRetirada && validaDataPrevista && validaDatas && validaDataDevolucao
                 && !alocacao.Notificacoes.Any();
         }
 
