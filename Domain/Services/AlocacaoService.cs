@@ -44,8 +44,8 @@ namespace Domain.Services
                     alocacao.Notificacoes.Add(new Notifies { NomePropriedade = "IdCarro", Mensagem = "Carro não está disponível para alocação" });
             }
 
-            // Calcula ValorTotal só se status for Retornado
-            if (validaCarro && validaCliente)
+            // Calcula ValorTotal só se status for Retornado E tiver data devoluçlão
+            if (validaCarro && validaCliente && alocacao.DataDevolucao.HasValue)
             {
                 if (alocacao.Status == AlocacaoStatusEnum.Retornado)
                 {
@@ -55,7 +55,7 @@ namespace Domain.Services
                         var categoria = await _ICategoriaCarro.GetEntityById(carro.IdCategoria);
                         if (categoria != null)
                         {
-                            int dias = (alocacao.DataPrevistaDevolucao.ToDateTime(TimeOnly.MinValue)
+                            int dias = (alocacao.DataDevolucao.Value.ToDateTime(TimeOnly.MinValue)
                                        - alocacao.DataRetirada.ToDateTime(TimeOnly.MinValue)).Days;
                             alocacao.ValorTotal = dias * categoria.ValorDiaria;
                         }
@@ -98,7 +98,7 @@ namespace Domain.Services
             }
             // Busca a alocação original para saber qual carro estava vinculado
             // Isso é pra evitar checar se o carro tá disponível se ele é o da própria alocação
-            var alocacaoOriginal = await _IAlocacao.GetEntityById(alocacao.Id);
+            var alocacaoOriginal = await _IAlocacao.GetByIdNoTracking(alocacao.Id); // sem tracking 
             bool carroMudou = alocacaoOriginal == null || alocacaoOriginal.IdCarro != alocacao.IdCarro;
 
             if (await ValidarAlocacao(alocacao, isUpdate: true, validarDisponibilidade: carroMudou))

@@ -63,6 +63,7 @@ namespace Domain.Services
         {
             if (await ValidarCarro(carro))
             {
+                carro.DataCriacao = DateTime.UtcNow;
                 carro.DataAlteracao = DateTime.UtcNow;
                 await _ICarro.Add(carro);
             }

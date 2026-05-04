@@ -58,14 +58,13 @@ namespace WebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Atualizar(int id, [FromBody] CriarCategoriaCarroDto dto)
         {
-            var categoria = new CategoriaCarro
-            {
-                Id = id,
-                Nome = dto.Nome,
-                Descricao = dto.Descricao,
-                ValorDiaria = dto.ValorDiaria,
-                Ativo = dto.Ativo
-            };
+            var categoria = await _app.BuscarPorId(id);
+            if (categoria == null) return NaoEncontrado("Categoria");
+
+            categoria.Nome = dto.Nome;
+            categoria.Descricao = dto.Descricao;
+            categoria.ValorDiaria = dto.ValorDiaria;
+            categoria.Ativo = dto.Ativo;
 
             await _app.Atualizar(categoria);
             if (categoria.Notificacoes.Any())

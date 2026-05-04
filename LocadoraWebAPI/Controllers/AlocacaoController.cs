@@ -61,16 +61,15 @@ namespace WebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Atualizar(int id, [FromBody] CriarAlocacaoDto dto)
         {
-            var alocacao = new Alocacao
-            {
-                Id = id,
-                IdCarro = dto.IdCarro,
-                IdCliente = dto.IdCliente,
-                Status = dto.Status,
-                DataRetirada = dto.DataRetirada,
-                DataDevolucao = dto.DataDevolucao,
-                DataPrevistaDevolucao = dto.DataPrevistaDevolucao
-            };
+            var alocacao = await _alocacaoApp.BuscarPorId(id);
+            if (alocacao == null) return NaoEncontrado("Alocação");
+
+            alocacao.IdCarro = dto.IdCarro;
+            alocacao.IdCliente = dto.IdCliente;
+            alocacao.Status = dto.Status;
+            alocacao.DataRetirada = dto.DataRetirada;
+            alocacao.DataDevolucao = dto.DataDevolucao;
+            alocacao.DataPrevistaDevolucao = dto.DataPrevistaDevolucao;
 
             await _alocacaoApp.Atualizar(alocacao);
 

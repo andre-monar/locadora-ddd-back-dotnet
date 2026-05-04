@@ -11,5 +11,6 @@ namespace Domain.Interfaces.InterfaceAlocacao
     public interface IAlocacao : IGeneric<Alocacao>
     {
         Task<List<Alocacao>> ListarComRelacionamentos();
+        Task<Alocacao> GetByIdNoTracking(int id); // sem tracking para verificar se carro mudou sem conflito
     }
 }

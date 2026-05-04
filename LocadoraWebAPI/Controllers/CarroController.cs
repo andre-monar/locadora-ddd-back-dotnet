@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> BuscarPorId(int id)
         {
             var carro = await _carroApp.BuscarPorId(id);
-            if (carro == null) return NaoEncontrado("Veículo");
+            if (carro == null) return NaoEncontrado("Carro");
             return Sucesso(carro);
         }
 
@@ -73,26 +73,23 @@ namespace WebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Atualizar(int id, [FromBody] CriarCarroDto dto)
         {
-            var carro = new Carro
-            {
-                Id = id,
-                Modelo = dto.Modelo,
-                Marca = dto.Marca,
-                Placa = dto.Placa,
-                Ano = dto.Ano,
-                Cor = dto.Cor,
-                ImagemUrl = dto.ImagemUrl,
-                IdCategoria = dto.IdCategoria,
-                Ativo = dto.Ativo
-            };
+            var carro = await _carroApp.BuscarPorId(id);
+            if (carro == null) return NaoEncontrado("Carro");
+
+            carro.Modelo = dto.Modelo;
+            carro.Marca = dto.Marca;
+            carro.Placa = dto.Placa;
+            carro.Ano = dto.Ano;
+            carro.Cor = dto.Cor;
+            carro.ImagemUrl = dto.ImagemUrl ?? string.Empty;
+            carro.IdCategoria = dto.IdCategoria;
+            carro.Ativo = dto.Ativo;
 
             await _carroApp.Atualizar(carro);
-            
 
             if (carro.Notificacoes.Any())
                 return ErroValidacao(carro.Notificacoes.Select(n => new { campo = n.NomePropriedade, mensagem = n.Mensagem }));
-            // Recarrega com categoria
-            carro = await _carroApp.BuscarPorId(carro.Id);
+
             return Sucesso(carro);
         }
 

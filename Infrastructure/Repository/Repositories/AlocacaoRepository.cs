@@ -21,5 +21,13 @@ namespace Infrastructure.Repository.Repositories
                 .AsNoTracking()
                 .ToListAsync();
         }
+
+        // método sem tracking para verificar se carro mudou sem conflioo
+        public async Task<Alocacao> GetByIdNoTracking(int id)
+        {
+            return await _context.Set<Alocacao>()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
     }
 }

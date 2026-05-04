@@ -63,19 +63,18 @@ namespace WebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Atualizar(int id, [FromBody] CriarClienteDto dto)
         {
-            var cliente = new Cliente
-            {
-                Id = id,
-                Nome = dto.Nome,
-                CPF = dto.CPF,
-                DataNascimento = dto.DataNascimento,
-                Celular = dto.Celular,
-                Email = dto.Email,
-                CEP = dto.CEP,
-                Endereco = dto.Endereco,
-                ComplementoEndereco = dto.ComplementoEndereco,
-                Ativo = dto.Ativo
-            };
+            var cliente = await _clienteApp.BuscarPorId(id);
+            if (cliente == null) return NaoEncontrado("Cliente");
+
+            cliente.Nome = dto.Nome;
+            cliente.CPF = dto.CPF;
+            cliente.DataNascimento = dto.DataNascimento;
+            cliente.Celular = dto.Celular;
+            cliente.Email = dto.Email;
+            cliente.CEP = dto.CEP;
+            cliente.Endereco = dto.Endereco;
+            cliente.ComplementoEndereco = dto.ComplementoEndereco;
+            cliente.Ativo = dto.Ativo;
 
             await _clienteApp.Atualizar(cliente);
 

@@ -67,6 +67,10 @@ namespace Entities.Entities
         [Required]
         public bool Disponivel { get; set; }
 
+        [Column("CAR_DATA_CRIACAO")]
+        [Display(Name = "Data de Criação")]
+        public DateTime DataCriacao { get; set; }
+
         [Column("CAR_DATA_ALTERACAO")]
         [Display(Name = "Data de Alteração")]
         public DateTime DataAlteracao { get; set; }
