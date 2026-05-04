@@ -39,4 +39,4 @@ jobs:
           az containerapp update \
             --name calocadora \
             --resource-group rg-locadora \
-            --image acrlocadora.azurecr.io/locadora-api:latest
+            --image acrlocadora.azurecr.io/locadora-api:${{ github.sha }}
